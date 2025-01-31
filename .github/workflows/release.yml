@@ -1,0 +1,102 @@
+name: CI/CD_PUSH_MAIN_RELEASE
+run-name: ${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - 'main'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  validate-code:
+    name: Restore, Build and Publish Project
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        pnpm_version: [9]
+        node_version: [20]
+        dotnet_version: [9.x]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Get the last commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet_version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ matrix.pnpm_version }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Restore
+        run: pnpm restore
+
+      - name: Build
+        run: pnpm build
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Publish
+        run: pnpm run publish
+
+  release:
+    name: Create Release
+    needs: validate-code
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        pnpm_version: [9]
+        node_version: [20]
+        dotnet_version: [9.x]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Get the last commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet_version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ matrix.pnpm_version }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Create Release
+        run: pnpm exec semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

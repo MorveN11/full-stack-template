@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=postgres-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redislabs/redismod
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - '6379:6379'
+
+  seq:
+    image: datalust/seq:2024.3
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - '8081:80'
+      - '5341:5341'
+
+  papercut:
+    image: changemakerstudiosus/papercut-smtp:7.0.0-rc1
+    container_name: papercut
+    ports:
+      - '8080:80'
+      - '25:25'
+
+volumes:
+  postgres-data:
+  redis-data:

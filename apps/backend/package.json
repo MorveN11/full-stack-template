@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "scripts": {
+    "dev": "dotnet watch --project ./src/Presentation run",
+    "restore": "dotnet restore",
+    "build": "dotnet build --configuration Release --no-restore",
+    "publish": "dotnet publish --configuration Release --no-restore --no-build",
+    "migrate:add": "dotnet ef migrations --project ./src/Infrastructure/ --startup-project ./src/Presentation/ add",
+    "migrate:sql": "rm -rf ./scripts/migrations.sql && dotnet ef migrations --project ./src/Infrastructure/ --startup-project ./src/Presentation/ script --output ./scripts/migrations.sql -i"
+  }
+}

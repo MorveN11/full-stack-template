@@ -1,0 +1,45 @@
+# Jetbrains
+.idea/
+
+# Testing
+coverage/
+
+# GIT
+.git/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# .NET
+bin/
+obj/
+packages/
+riderModule.iml
+_ReSharper.Caches/
+*.binlog
+*.DotSettings.user
+
+# Next.js
+.next/
+out/
+build/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+.pnpm-debug.log*
+
+# Env files
+.env*
+
+# vercel
+.vercel
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
