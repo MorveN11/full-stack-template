@@ -17,12 +17,12 @@ internal sealed class RoleConfiguration : EntityConfiguration<Role>
             .WithMany(u => u.Roles)
             .UsingEntity<UserRole>(
                 l =>
-                    l.HasOne<User>()
+                    l.HasOne<User>(ur => ur.User)
                         .WithMany(u => u.UserRoles)
                         .HasForeignKey(ur => ur.UserId)
                         .IsRequired(),
                 r =>
-                    r.HasOne<Role>()
+                    r.HasOne<Role>(ur => ur.Role)
                         .WithMany(ro => ro.UserRoles)
                         .HasForeignKey(ur => ur.RoleId)
                         .IsRequired()

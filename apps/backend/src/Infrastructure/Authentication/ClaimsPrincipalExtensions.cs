@@ -28,4 +28,10 @@ internal static class ClaimsPrincipalExtensions
             ? parsedEmailVerified
             : throw new ApplicationException("Email verification status is unavailable");
     }
+
+    public static HashSet<string> GetRoles(this ClaimsPrincipal? principal)
+    {
+        string? roles = principal?.FindFirstValue("user_roles");
+        return roles?.Split(',').ToHashSet() ?? [];
+    }
 }

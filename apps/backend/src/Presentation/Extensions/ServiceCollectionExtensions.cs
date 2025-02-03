@@ -40,7 +40,7 @@ internal static class ServiceCollectionExtensions
         {
             options.Configuration = configuration.GetConnectionString("Redis");
 
-            options.InstanceName = "web-api-";
+            options.InstanceName = configuration["Redis:InstanceName"];
         });
 
         return services;

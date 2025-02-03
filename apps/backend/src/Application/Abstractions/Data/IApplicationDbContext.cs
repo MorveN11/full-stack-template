@@ -1,4 +1,5 @@
-﻿using Domain.Roles;
+﻿using Domain.Joins;
+using Domain.Roles;
 using Domain.Tokens;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ public interface IApplicationDbContext
         where TEntity : class;
 
     DbSet<User> Users { get; }
+
+    DbSet<UserRole> UserRoles { get; }
 
     DbSet<Role> Roles { get; }
 

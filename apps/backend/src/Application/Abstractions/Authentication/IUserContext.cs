@@ -7,4 +7,6 @@ public interface IUserContext
     string Email { get; }
 
     bool EmailVerified { get; }
+
+    HashSet<string> Roles { get; }
 }

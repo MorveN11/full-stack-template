@@ -92,7 +92,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "user_role",
+                name: "user_roles",
                 schema: "public",
                 columns: table => new
                 {
@@ -104,16 +104,16 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_role", x => new { x.role_id, x.user_id });
+                    table.PrimaryKey("pk_user_roles", x => new { x.role_id, x.user_id });
                     table.ForeignKey(
-                        name: "fk_user_role_roles_role_id",
+                        name: "fk_user_roles_roles_role_id",
                         column: x => x.role_id,
                         principalSchema: "public",
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_user_role_users_user_id",
+                        name: "fk_user_roles_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "public",
                         principalTable: "users",
@@ -148,9 +148,9 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_user_role_user_id",
+                name: "ix_user_roles_user_id",
                 schema: "public",
-                table: "user_role",
+                table: "user_roles",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
@@ -173,7 +173,7 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "user_role",
+                name: "user_roles",
                 schema: "public");
 
             migrationBuilder.DropTable(

@@ -23,6 +23,7 @@ internal sealed class LoginUserCommandHandler(
     {
         User? user = await context
             .Users.AsNoTracking()
+            .Include(u => u.Roles)
             .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
         if (user is null || !user.IsActive)

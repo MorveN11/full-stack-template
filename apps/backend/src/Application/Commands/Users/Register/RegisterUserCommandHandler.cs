@@ -28,21 +28,27 @@ internal sealed class RegisterUserCommandHandler(
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
         }
 
-        foreach (Guid roleId in command.Roles)
+        foreach (string roleName in command.Roles)
         {
-            if (!await context.Roles.AnyAsync(r => r.Id == roleId, cancellationToken))
+            if (!await context.Roles.AnyAsync(r => r.Name == roleName, cancellationToken))
             {
-                return Result.Failure<Guid>(RoleErrors.NotFound(roleId));
+                return Result.Failure<Guid>(RoleErrors.NotFound(roleName));
             }
         }
+
+        List<Guid> roleIds = await context
+            .Roles.AsNoTracking()
+            .Where(r => command.Roles.Contains(r.Name))
+            .Select(r => r.Id)
+            .ToListAsync(cancellationToken);
 
         var user = new User
         {
             Id = Guid.NewGuid(),
             Email = command.Email,
             PasswordHash = passwordHasher.Hash(command.Password),
-            UserRoles = command
-                .Roles.Select(r => new UserRole { RoleId = r, CreatedAt = timeProvider.UtcNow })
+            UserRoles = roleIds
+                .Select(r => new UserRole { RoleId = r, CreatedAt = timeProvider.UtcNow })
                 .ToList(),
             CreatedAt = timeProvider.UtcNow,
         };

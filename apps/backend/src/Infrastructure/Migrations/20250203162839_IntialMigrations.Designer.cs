@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250131080413_IntialMigrations")]
+    [Migration("20250203162839_IntialMigrations")]
     partial class IntialMigrations
     {
         /// <inheritdoc />
@@ -49,12 +49,12 @@ namespace Infrastructure.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("RoleId", "UserId")
-                        .HasName("pk_user_role");
+                        .HasName("pk_user_roles");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_role_user_id");
+                        .HasDatabaseName("ix_user_roles_user_id");
 
-                    b.ToTable("user_role", "public");
+                    b.ToTable("user_roles", "public");
                 });
 
             modelBuilder.Entity("Domain.Roles.Role", b =>
@@ -206,19 +206,23 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Joins.UserRole", b =>
                 {
-                    b.HasOne("Domain.Roles.Role", null)
+                    b.HasOne("Domain.Roles.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_role_roles_role_id");
+                        .HasConstraintName("fk_user_roles_roles_role_id");
 
-                    b.HasOne("Domain.Users.User", null)
+                    b.HasOne("Domain.Users.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_role_users_user_id");
+                        .HasConstraintName("fk_user_roles_users_user_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Tokens.EmailVerificationToken", b =>

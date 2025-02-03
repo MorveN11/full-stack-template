@@ -13,7 +13,7 @@ internal sealed class Register : IEndpoint
     {
         public required string Email { get; init; }
         public required string Password { get; init; }
-        public List<Guid> Roles { get; init; } = [];
+        public List<string> Roles { get; init; } = [];
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)

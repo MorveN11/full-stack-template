@@ -1,4 +1,5 @@
 using Application.Abstractions.Data;
+using Domain.Joins;
 using Domain.Roles;
 using Domain.Tokens;
 using Domain.Users;
@@ -16,6 +17,8 @@ public sealed class ApplicationDbContext(
 ) : DbContext(options), IApplicationDbContext
 {
     public DbSet<User> Users { get; init; }
+
+    public DbSet<UserRole> UserRoles { get; init; }
 
     public DbSet<Role> Roles { get; init; }
 

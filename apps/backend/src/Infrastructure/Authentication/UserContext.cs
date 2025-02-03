@@ -16,4 +16,8 @@ internal sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IU
     public bool EmailVerified =>
         httpContextAccessor.HttpContext?.User.GetEmailVerified()
         ?? throw new ApplicationException("User context is unavailable");
+
+    public HashSet<string> Roles =>
+        httpContextAccessor.HttpContext?.User.GetRoles()
+        ?? throw new ApplicationException("User context is unavailable");
 }
