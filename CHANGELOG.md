@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.1.0](https://github.com/MorveN11/full-stack-template/compare/v1.0.0...v1.1.0) (2025-02-03)
+
+
+### Features
+
+* update backend template ([6506edd](https://github.com/MorveN11/full-stack-template/commit/6506edda67b4ce97e8e8e3f6727507e91adcaa2c))
+
 # 1.0.0 (2025-01-31)
 
 
