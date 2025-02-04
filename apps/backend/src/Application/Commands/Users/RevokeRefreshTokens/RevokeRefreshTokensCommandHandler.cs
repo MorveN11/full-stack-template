@@ -19,7 +19,7 @@ internal sealed class RevokeRefreshTokensCommandHandler(
     {
         if (command.UserId != userContext.UserId)
         {
-            return Result.Failure(UserErrors.Unauthorized);
+            return Result.Failure(UserErrors.Forbidden);
         }
 
         await context

@@ -17,12 +17,12 @@ public static class UserErrors
         "The email or password is incorrect"
     );
 
-    public static readonly Error Unauthorized = Error.Problem(
-        "Users.Unauthorized",
-        "You are not authorized to perform this action."
+    public static readonly Error Forbidden = Error.Forbidden(
+        "Users.Forbidden",
+        "You are not allowed to perform this operation"
     );
 
-    public static readonly Error EmailNotVerified = Error.Problem(
+    public static readonly Error EmailNotVerified = Error.Forbidden(
         "Users.EmailNotVerified",
         "The email address is not verified"
     );

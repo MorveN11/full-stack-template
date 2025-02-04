@@ -19,7 +19,7 @@ internal sealed class GetUserByIdQueryHandler(
     {
         if (query.UserId != userContext.UserId)
         {
-            return Result.Failure<UserResponse>(UserErrors.Unauthorized);
+            return Result.Failure<UserResponse>(UserErrors.Forbidden);
         }
 
         User? user = await context

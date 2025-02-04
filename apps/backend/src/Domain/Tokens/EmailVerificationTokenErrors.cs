@@ -4,7 +4,7 @@ namespace Domain.Tokens;
 
 public static class EmailVerificationTokenErrors
 {
-    public static readonly Error TokenExpired = Error.Problem(
+    public static readonly Error TokenExpired = Error.Unauthorized(
         "Tokens.TokenExpired",
         "The email verification token has expired"
     );
