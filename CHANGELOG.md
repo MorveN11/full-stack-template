@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.3.0](https://github.com/MorveN11/full-stack-template/compare/v1.2.0...v1.3.0) (2025-02-05)
+
+
+### Features
+
+* add logout endpoint ([29526b1](https://github.com/MorveN11/full-stack-template/commit/29526b1e0bb7a9e36c137eac47536c268636022e))
+
 # [1.2.0](https://github.com/MorveN11/full-stack-template/compare/v1.1.0...v1.2.0) (2025-02-04)
 
 
