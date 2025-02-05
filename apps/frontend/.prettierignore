@@ -1,6 +1,8 @@
 .next/
 build/
 node_modules/
+dist/
+public/
 *.tsbuildinfo
 next-env.d.ts
-dist/
+README.md

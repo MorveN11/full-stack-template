@@ -1,7 +1,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Utilities;
+using Application.Abstractions.Services;
 using Domain.Joins;
 using Domain.Roles;
 using Domain.Users;
@@ -15,7 +15,7 @@ internal sealed class RegisterUserCommandHandler(
     IApplicationDbContext context,
     IPasswordHasher passwordHasher,
     IDateTimeProvider timeProvider,
-    ICacheStore cacheStore
+    ICacheService cacheService
 ) : ICommandHandler<RegisterUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
@@ -59,7 +59,7 @@ internal sealed class RegisterUserCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await cacheStore.EvictByTagAsync(Tags.Users, cancellationToken);
+        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
 
         return user.Id;
     }

@@ -9,4 +9,6 @@ public interface IUserContext
     bool EmailVerified { get; }
 
     HashSet<string> Roles { get; }
+
+    string Jwt { get; }
 }

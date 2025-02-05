@@ -1,5 +1,5 @@
 using Application.Abstractions.Data;
-using Application.Abstractions.Utilities;
+using Application.Abstractions.Factories;
 using Domain.Tokens;
 using Domain.Users;
 using FluentEmail.Core;

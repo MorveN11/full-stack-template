@@ -24,6 +24,7 @@
     "migrate:add": "pnpm -F=backend migrate:add",
     "migrate:sql": "pnpm -F=backend migrate:sql",
     "lint": "pnpm -F=frontend lint",
+    "format": "pnpm -F=frontend format",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -99,6 +100,12 @@ Remove `LICENSE` file to reset the license, use your own license.
 
   ```sh
   pnpm lint
+  ```
+
+- **format**: Formats the frontend project.
+
+  ```sh
+  pnpm format
   ```
 
 - **prepare**: Sets up Husky for managing Git hooks.

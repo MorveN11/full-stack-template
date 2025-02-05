@@ -27,13 +27,11 @@ WebApplication app = builder.Build();
 
 app.MapEndpoints();
 
-await app.ApplyMigrations();
-
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwaggerWithUi();
 
-    await app.SeedData();
+    await app.ApplyMigrations();
 }
 
 app.MapHealthChecks(

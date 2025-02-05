@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Utilities;
+using Application.Abstractions.Services;
 using Domain.Tokens;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
@@ -9,7 +9,7 @@ namespace Application.Queries.Users.VerifyEmail;
 
 internal sealed class VerifyUserEmailQueryHandler(
     IApplicationDbContext context,
-    ICacheStore cacheStore
+    ICacheService cacheService
 ) : IQueryHandler<VerifyUserEmailQuery, string>
 {
     public async Task<Result<string>> Handle(
@@ -37,7 +37,7 @@ internal sealed class VerifyUserEmailQueryHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await cacheStore.EvictByTagAsync(Tags.Users, cancellationToken);
+        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
 
         return Result.Success("Email verified successfully");
     }

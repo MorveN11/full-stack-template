@@ -13,5 +13,7 @@ internal static class MigrationExtensions
             scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         await dbContext.Database.MigrateAsync();
+
+        await dbContext.SeedDataAsync(scope);
     }
 }

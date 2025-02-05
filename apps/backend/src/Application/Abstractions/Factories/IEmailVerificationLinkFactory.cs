@@ -1,6 +1,6 @@
 using Domain.Tokens;
 
-namespace Application.Abstractions.Utilities;
+namespace Application.Abstractions.Factories;
 
 public interface IEmailVerificationLinkFactory
 {

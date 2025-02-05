@@ -2,13 +2,15 @@ using System.Reflection;
 using System.Text;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
-using Application.Abstractions.Utilities;
+using Application.Abstractions.Factories;
+using Application.Abstractions.Services;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Database;
+using Infrastructure.Factories;
 using Infrastructure.Seed.Abstractions;
+using Infrastructure.Services;
 using Infrastructure.Time;
-using Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +40,7 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        services.AddScoped<ICacheStore, CacheStore>();
+        services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
 
         return services;
@@ -120,6 +122,23 @@ public static class DependencyInjection
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero,
+                };
+                o.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        ICacheService cacheService =
+                            context.HttpContext.RequestServices.GetRequiredService<ICacheService>();
+
+                        string token = context
+                            .Request.Headers.Authorization.ToString()
+                            .Replace("Bearer ", string.Empty);
+
+                        if (await cacheService.IsTokenBlacklistedAsync(token))
+                        {
+                            context.Fail("Token is blacklisted.");
+                        }
+                    },
                 };
             });
 

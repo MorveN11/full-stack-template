@@ -20,4 +20,8 @@ internal sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IU
     public HashSet<string> Roles =>
         httpContextAccessor.HttpContext?.User.GetRoles()
         ?? throw new ApplicationException("User context is unavailable");
+
+    public string Jwt =>
+        httpContextAccessor.HttpContext?.Request.GetJwtToken()
+        ?? throw new ApplicationException("User context is unavailable");
 }

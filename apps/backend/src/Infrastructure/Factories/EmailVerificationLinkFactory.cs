@@ -1,10 +1,10 @@
 using Application;
-using Application.Abstractions.Utilities;
+using Application.Abstractions.Factories;
 using Domain.Tokens;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Infrastructure.Utilities;
+namespace Infrastructure.Factories;
 
 internal sealed class EmailVerificationLinkFactory(
     IHttpContextAccessor httpContextAccessor,

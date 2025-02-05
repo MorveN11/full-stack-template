@@ -11,6 +11,7 @@
     "migrate:add": "pnpm -F=backend migrate:add",
     "migrate:sql": "pnpm -F=backend migrate:sql",
     "lint": "pnpm -F=frontend lint",
+    "format": "pnpm -F=frontend format",
     "prepare": "husky"
   },
   "devDependencies": {
