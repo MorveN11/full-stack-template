@@ -1,14 +1,10 @@
 using Domain.Users;
+using SharedKernel.Domain;
 
 namespace Domain.Tokens;
 
-public sealed class EmailVerificationToken
+public sealed class EmailVerificationToken : Entity
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
-
     public required Guid UserId { get; init; }
-
-    public required DateTime CreatedOnUtc { get; init; }
-
     public User User { get; init; } = null!;
 }

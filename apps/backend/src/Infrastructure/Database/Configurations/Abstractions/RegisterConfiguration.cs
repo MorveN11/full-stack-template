@@ -12,18 +12,16 @@ internal abstract class RegisterConfiguration<TEntity> : IEntityTypeConfiguratio
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
         _ = builder
-            .Property(e => e.CreatedAt)
+            .Property(e => e.CreatedOnUtc)
             .HasColumnType("timestamptz")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .ValueGeneratedOnAdd();
 
         _ = builder
-            .Property(e => e.UpdatedAt)
+            .Property(e => e.UpdatedOnUtc)
             .HasColumnType("timestamptz")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .ValueGeneratedOnUpdate();
-
-        _ = builder.Property(e => e.IsActive).HasDefaultValue(true).ValueGeneratedOnAdd();
 
         ConfigureEntity(builder);
     }

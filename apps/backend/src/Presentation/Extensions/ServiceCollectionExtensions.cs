@@ -1,105 +1,19 @@
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Presentation.Infrastructure;
 
 namespace Presentation.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCorsInternal(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
-    {
-        services.AddCors(options =>
-            options.AddDefaultPolicy(policy =>
-                policy
-                    .WithOrigins(configuration["AllowedOrigins"]!.Split(","))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-            )
-        );
-
-        return services;
-    }
-
-    public static IServiceCollection AddRedisCache(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
-    {
-        services.AddOutputCache(options =>
-            options.AddBasePolicy(
-                builder => builder.AddPolicy<RedisCachePolicy>().SetCacheKeyPrefix("custom-"),
-                true
-            )
-        );
-
-        services.AddStackExchangeRedisOutputCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString("Redis");
-
-            options.InstanceName = configuration["Redis:InstanceName"];
-        });
-
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString("Redis");
-            options.InstanceName = configuration["Redis:InstanceName"];
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddFluentEmailInternal(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        IWebHostEnvironment environment
-    )
-    {
-        FluentEmailServicesBuilder builder = services.AddFluentEmail(
-            configuration["Email:SenderEmail"],
-            configuration["Email:Sender"]
-        );
-
-        if (environment.IsDevelopment() || environment.IsStaging())
-        {
-            builder.AddSmtpSender(
-                configuration["Email:Host"],
-                configuration.GetValue<int>("Email:Port")
-            );
-        }
-        else
-        {
-            builder.AddSmtpSender(
-                configuration["Email:Host"],
-                configuration.GetValue<int>("Email:Port"),
-                configuration["Email:Username"],
-                configuration["Email:Password"]
-            );
-        }
-
-        return services;
-    }
-
     public static IServiceCollection AddSwaggerGenWithAuth(
         this IServiceCollection services,
-        string title,
-        string description
+        string title
     )
     {
         return services.AddSwaggerGen(o =>
         {
-            o.SwaggerDoc(
-                "v1",
-                new OpenApiInfo
-                {
-                    Title = title,
-                    Version = "v1",
-                    Description = description,
-                }
-            );
+            o.SwaggerDoc("v1", new OpenApiInfo { Title = title, Version = "v1" });
 
             o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
@@ -131,6 +45,48 @@ internal static class ServiceCollectionExtensions
             };
 
             o.AddSecurityRequirement(securityRequirement);
+        });
+    }
+
+    public static IServiceCollection AddCorsInternal(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
+                policy
+                    .WithOrigins(configuration["AllowedOrigins"]!.Split(","))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+            )
+        );
+
+        return services;
+    }
+
+    public static IServiceCollection AddRateLimiterInternal(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        return services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(_ =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    configuration["RateLimiter:Key"]!,
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = configuration.GetValue<int>("RateLimiter:PermitLimit"),
+                        Window = TimeSpan.FromSeconds(
+                            configuration.GetValue<int>("RateLimiter:WindowInSeconds")
+                        ),
+                    }
+                )
+            );
         });
     }
 }

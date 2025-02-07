@@ -7,13 +7,10 @@ internal static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(
         this IServiceCollection services,
-        IConfiguration configuration,
-        IWebHostEnvironment environment
+        IConfiguration configuration
     )
     {
         services.AddEndpointsApiExplorer();
-
-        services.AddSwaggerGen();
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
 
@@ -23,9 +20,7 @@ internal static class DependencyInjection
 
         services.AddCorsInternal(configuration);
 
-        services.AddRedisCache(configuration);
-
-        services.AddFluentEmailInternal(configuration, environment);
+        services.AddRateLimiterInternal(configuration);
 
         return services;
     }

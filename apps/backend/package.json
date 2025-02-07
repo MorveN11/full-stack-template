@@ -6,6 +6,7 @@
     "build": "dotnet build --configuration Release --no-restore",
     "publish": "dotnet publish --configuration Release --no-restore --no-build",
     "migrate:add": "dotnet ef migrations --project ./src/Infrastructure/ --startup-project ./src/Presentation/ add",
-    "migrate:sql": "rm -rf ./scripts/migrations.sql && dotnet ef migrations --project ./src/Infrastructure/ --startup-project ./src/Presentation/ script --output ./scripts/migrations.sql -i"
+    "ef:install": "dotnet tool install --global dotnet-ef",
+    "ef:bundle": "dotnet ef migrations bundle --configuration HealthChecks__Enabled=false --force --project ./src/Infrastructure/ --startup-project ./src/Presentation/ --output ../../efbundle"
   }
 }

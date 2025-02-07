@@ -1,15 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk"> 
+  
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" />
-    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="FluentEmail.Smtp" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
-    <PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="ZiggyCreatures.FusionCache" />
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" />
   </ItemGroup>
 
   <ItemGroup>

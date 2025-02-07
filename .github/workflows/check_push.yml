@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate-code:
-    name: Restore, Build and Publish Project
+    name: Restore, Build, Lint and Publish Project
     strategy:
       matrix:
         os: [ubuntu-latest]

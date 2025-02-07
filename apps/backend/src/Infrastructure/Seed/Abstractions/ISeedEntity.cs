@@ -1,4 +1,4 @@
-using Application.Abstractions.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Seed.Abstractions;
 
@@ -6,5 +6,7 @@ internal interface ISeedEntity
 {
     DbPriority Priority { get; }
 
-    void SeedData(IApplicationDbContext context);
+    SeedEnvironment Environment { get; }
+
+    void SeedData(DbContext context);
 }

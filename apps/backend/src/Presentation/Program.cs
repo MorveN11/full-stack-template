@@ -9,23 +9,21 @@ using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+// TODO: Add API title for Swagger
+builder.Services.AddSwaggerGenWithAuth("Clean Architecture API");
+
 builder.Host.UseSerilog(
     (context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration)
 );
 
-// TODO: Add API title and description for Swagger
-builder.Services.AddSwaggerGenWithAuth(title: "API Title", description: "API description");
-
 builder
     .Services.AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddPresentation(builder.Configuration, builder.Environment);
+    .AddPresentation(builder.Configuration)
+    .AddInfrastructure(builder.Configuration, builder.Environment);
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
-
-app.MapEndpoints();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
@@ -34,11 +32,12 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     await app.ApplyMigrations();
 }
 
+app.MapEndpoints();
+
 app.MapHealthChecks(
-        "/health",
-        new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse }
-    )
-    .CacheOutput(b => b.NoCache());
+    "/health",
+    new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse }
+);
 
 app.UseRequestContextLogging();
 
@@ -46,12 +45,12 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseOutputCache();
-
-app.UseCors();
-
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors();
+
+app.UseRateLimiter();
 
 await app.RunAsync();

@@ -3,8 +3,8 @@
 ## Pending Implementations
 
 ```csharp
-// TODO: Add API title and description
-builder.Services.AddSwaggerGenWithAuth(title: "API Title", description: "API description");
+// TODO: Add API title for Swagger
+builder.Services.AddSwaggerGenWithAuth("Clean Architecture API");
 ```
 
 In the `Presentation` project, you'll find the `Program`. You can add the API
@@ -44,8 +44,14 @@ title and description to the Swagger documentation.
   pnpm migrate:add <MigrationName>
   ```
 
-- **migrate:sql**: Generates a SQL script for the current migrations.
+- **ef:install**: Installs the Entity Framework CLI tool.
 
   ```sh
-  pnpm migrate:sql
+  pnpm ef:install
+  ```
+
+- **ef:bundle**: Bundles the migrations into a single migration.
+
+  ```sh
+  pnpm ef:bundle
   ```

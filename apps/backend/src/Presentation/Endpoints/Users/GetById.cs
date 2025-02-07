@@ -1,5 +1,5 @@
-using Application;
 using Application.Queries.Users.GetById;
+using Domain.Identifiers;
 using MediatR;
 using Presentation.Extensions;
 using Presentation.Infrastructure;
@@ -22,9 +22,8 @@ internal sealed class GetById : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Users)
             .RequireAuthorization()
-            .AddCacheWithAuthorization(Tags.Users)
+            .WithTags(Tags.Users)
             .WithSummary("Get user by id");
     }
 }

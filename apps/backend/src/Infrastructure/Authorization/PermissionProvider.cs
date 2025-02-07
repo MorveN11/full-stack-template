@@ -1,19 +1,25 @@
-﻿using Application.Abstractions.Data;
-using Domain.Users;
+﻿using Application.Abstractions.Authorization;
+using Application.Abstractions.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Authorization;
 
-internal sealed class PermissionProvider(IApplicationDbContext context)
+internal sealed class PermissionProvider(IApplicationDbContext context) : IPermissionProvider
 {
-    public async Task<HashSet<string>> GetForUserIdAsync(Guid userId)
+    public async Task<HashSet<string>> GetForUserIdAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    )
     {
-        User user =
-            await context.Users.Include(u => u.Roles).SingleOrDefaultAsync(u => u.Id == userId)
-            ?? throw new InvalidOperationException("User not found.");
+        HashSet<string> roles = await context
+            .UserRoles.AsNoTracking()
+            .AsSplitQuery()
+            .Include(ur => ur.Role)
+            .ThenInclude(r => r.Permissions)
+            .Where(ur => ur.UserId == userId)
+            .SelectMany(ur => ur.Role.Permissions.Select(p => p.Name))
+            .ToHashSetAsync(cancellationToken);
 
-        var permissionsSet = user.Roles.Select(r => r.Name).ToHashSet();
-
-        return permissionsSet;
+        return roles;
     }
 }

@@ -1,4 +1,5 @@
 using Domain.Joins;
+using Domain.Permissions;
 using Domain.Roles;
 using Domain.Users;
 using Infrastructure.Database.Configurations.Abstractions;
@@ -25,6 +26,22 @@ internal sealed class RoleConfiguration : EntityConfiguration<Role>
                     r.HasOne<Role>(ur => ur.Role)
                         .WithMany(ro => ro.UserRoles)
                         .HasForeignKey(ur => ur.RoleId)
+                        .IsRequired()
+            );
+
+        builder
+            .HasMany(r => r.Permissions)
+            .WithMany(p => p.Roles)
+            .UsingEntity<RolePermission>(
+                l =>
+                    l.HasOne<Permission>(rp => rp.Permission)
+                        .WithMany(p => p.RolePermissions)
+                        .HasForeignKey(rp => rp.PermissionId)
+                        .IsRequired(),
+                r =>
+                    r.HasOne<Role>(rp => rp.Role)
+                        .WithMany(ro => ro.RolePermissions)
+                        .HasForeignKey(rp => rp.RoleId)
                         .IsRequired()
             );
     }

@@ -1,6 +1,6 @@
-using Application;
 using Application.Abstractions.Responses;
 using Application.Queries.Users.GetAll;
+using Domain.Identifiers;
 using MediatR;
 using Presentation.Extensions;
 using Presentation.Infrastructure;
@@ -31,9 +31,8 @@ internal sealed class GetAll : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
+            .RequireAuthorization()
             .WithTags(Tags.Users)
-            .HasPermission(Permissions.Admin)
-            .AddCacheWithAuthorization(Tags.Users)
-            .WithSummary("Get all developers");
+            .WithSummary("Get all users with pagination");
     }
 }

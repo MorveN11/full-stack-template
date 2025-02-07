@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Authentication;
 
-internal static class ClaimsPrincipalExtensions
+public static class ClaimsPrincipalExtensions
 {
     public static Guid GetUserId(this ClaimsPrincipal? principal)
     {
@@ -29,9 +29,10 @@ internal static class ClaimsPrincipalExtensions
             : throw new ApplicationException("Email verification status is unavailable");
     }
 
-    public static HashSet<string> GetRoles(this ClaimsPrincipal? principal)
+    public static List<string> GetRoles(this ClaimsPrincipal? principal)
     {
         string? roles = principal?.FindFirstValue("user_roles");
-        return roles?.Split(',').ToHashSet() ?? [];
+
+        return roles?.Split(',').ToList() ?? [];
     }
 }

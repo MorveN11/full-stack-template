@@ -1,12 +1,11 @@
 using Application.Abstractions.Data;
 using Domain.Joins;
+using Domain.Permissions;
 using Domain.Roles;
 using Domain.Tokens;
 using Domain.Users;
-using Infrastructure.Seed.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Domain;
 
 namespace Infrastructure.Database;
@@ -17,13 +16,11 @@ public sealed class ApplicationDbContext(
 ) : DbContext(options), IApplicationDbContext
 {
     public DbSet<User> Users { get; init; }
-
     public DbSet<UserRole> UserRoles { get; init; }
-
     public DbSet<Role> Roles { get; init; }
-
+    public DbSet<RolePermission> RolePermissions { get; init; }
+    public DbSet<Permission> Permissions { get; init; }
     public DbSet<EmailVerificationToken> EmailVerificationTokens { get; init; }
-
     public DbSet<RefreshToken> RefreshTokens { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,19 +58,5 @@ public sealed class ApplicationDbContext(
         {
             await publisher.Publish(domainEvent);
         }
-    }
-
-    public async Task SeedDataAsync(IServiceScope scope)
-    {
-        IOrderedEnumerable<ISeedEntity> seedEntities = scope
-            .ServiceProvider.GetServices<ISeedEntity>()
-            .OrderBy(entity => entity.Priority);
-
-        foreach (ISeedEntity seedEntity in seedEntities)
-        {
-            seedEntity.SeedData(this);
-        }
-
-        await SaveChangesAsync();
     }
 }

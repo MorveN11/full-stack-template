@@ -26,4 +26,9 @@ public static class UserErrors
         "Users.EmailNotVerified",
         "The email address is not verified"
     );
+
+    public static readonly Error DefaultRoleNotFound = Error.NotFound(
+        "Users.DefaultRoleNotFound",
+        "The default role was not found"
+    );
 }

@@ -1,15 +1,13 @@
 using Domain.Tokens;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Database.Configurations.Abstractions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Database.Configurations.Core;
 
-internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+internal sealed class RefreshTokenConfiguration : EntityConfiguration<RefreshToken>
 {
-    public void Configure(EntityTypeBuilder<RefreshToken> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<RefreshToken> builder)
     {
-        builder.HasKey(r => r.Id);
-
         builder.Property(r => r.Token).HasMaxLength(200);
 
         builder.HasIndex(r => r.Token).IsUnique();

@@ -2,11 +2,11 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="oqo0.SwaggerThemes" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Seq" />
     <PackageReference Include="Swashbuckle.AspNetCore" />

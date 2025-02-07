@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using Application.Abstractions.Authentication;
+using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Factories;
 using Application.Abstractions.Services;
@@ -8,17 +9,22 @@ using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Database;
 using Infrastructure.Factories;
+using Infrastructure.Seed;
 using Infrastructure.Seed.Abstractions;
 using Infrastructure.Services;
 using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SharedKernel.Time;
+using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Serialization.SystemTextJson;
 
 namespace Infrastructure;
 
@@ -26,7 +32,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IWebHostEnvironment environment
     ) =>
         services
             .AddServices()
@@ -34,14 +41,19 @@ public static class DependencyInjection
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
             .AddAuthenticationInternal(configuration)
-            .AddAuthorizationInternal();
+            .AddAuthorizationInternal()
+            .AddCacheInternal(configuration)
+            .AddFluentEmailInternal(environment, configuration);
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+
+        services.AddScoped<ICacheService, CacheService>();
+
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }
@@ -81,6 +93,45 @@ public static class DependencyInjection
                             Schemas.Default
                         )
                 )
+                .UseAsyncSeeding(
+                    async (dbContext, _, cancellationToken) =>
+                    {
+                        ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+                        using IServiceScope scope = serviceProvider.CreateScope();
+
+                        IOrderedEnumerable<ISeedEntity> seedEntities = scope
+                            .ServiceProvider.GetServices<ISeedEntity>()
+                            .OrderBy(entity => entity.Priority);
+
+                        foreach (ISeedEntity seedEntity in seedEntities)
+                        {
+                            seedEntity.SeedData(dbContext);
+                        }
+
+                        await dbContext.SaveChangesAsync(cancellationToken);
+                    }
+                )
+                .UseSeeding(
+                    (dbContext, _) =>
+                    {
+                        ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+                        using IServiceScope scope = serviceProvider.CreateScope();
+
+                        IOrderedEnumerable<ISeedEntity> seedEntities = scope
+                            .ServiceProvider.GetServices<ISeedEntity>()
+                            .Where(entity => entity.Environment == SeedEnvironment.Production)
+                            .OrderBy(entity => entity.Priority);
+
+                        foreach (ISeedEntity seedEntity in seedEntities)
+                        {
+                            seedEntity.SeedData(dbContext);
+                        }
+
+                        dbContext.SaveChanges();
+                    }
+                )
                 .UseSnakeCaseNamingConvention()
         );
 
@@ -96,6 +147,11 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
+        if (!configuration.GetValue<bool>("HealthChecks:Enabled"))
+        {
+            return services;
+        }
+
         services
             .AddHealthChecks()
             .AddNpgSql(configuration.GetConnectionString("Database")!)
@@ -143,8 +199,11 @@ public static class DependencyInjection
             });
 
         services.AddHttpContextAccessor();
+
         services.AddScoped<IUserContext, UserContext>();
+
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
         services.AddSingleton<ITokenProvider, TokenProvider>();
 
         return services;
@@ -154,14 +213,73 @@ public static class DependencyInjection
     {
         services.AddAuthorization();
 
-        services.AddScoped<PermissionProvider>();
+        services.AddScoped<IPermissionProvider, PermissionProvider>();
 
-        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddScoped<IAuthorizationHandler, AuthorizationHandler>();
 
-        services.AddTransient<
-            IAuthorizationPolicyProvider,
-            PermissionAuthorizationPolicyProvider
-        >();
+        return services;
+    }
+
+    private static IServiceCollection AddCacheInternal(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+
+            options.InstanceName = configuration["Cache:InstanceName"];
+        });
+
+        services
+            .AddFusionCache()
+            .WithDefaultEntryOptions(options =>
+                options.Duration = TimeSpan.FromMinutes(
+                    configuration.GetValue<int>("Cache:DefaultDurationMinutes")
+                )
+            )
+            .WithSerializer(new FusionCacheSystemTextJsonSerializer())
+            .WithDistributedCache(
+                new RedisCache(
+                    new RedisCacheOptions
+                    {
+                        Configuration = configuration.GetConnectionString("Redis"),
+                    }
+                )
+            )
+            .AsHybridCache();
+
+        return services;
+    }
+
+    private static IServiceCollection AddFluentEmailInternal(
+        this IServiceCollection services,
+        IWebHostEnvironment environment,
+        IConfiguration configuration
+    )
+    {
+        FluentEmailServicesBuilder builder = services.AddFluentEmail(
+            configuration["Email:SenderEmail"],
+            configuration["Email:Sender"]
+        );
+
+        if (environment.IsDevelopment() || environment.IsStaging())
+        {
+            builder.AddSmtpSender(
+                configuration["Email:Host"],
+                configuration.GetValue<int>("Email:Port")
+            );
+        }
+        else
+        {
+            builder.AddSmtpSender(
+                configuration["Email:Host"],
+                configuration.GetValue<int>("Email:Port"),
+                configuration["Email:Username"],
+                configuration["Email:Password"]
+            );
+        }
 
         return services;
     }

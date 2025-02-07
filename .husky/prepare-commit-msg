@@ -19,7 +19,7 @@ esac
 
 if exec </dev/tty; then
     echo -e "Running commitizen... 🎁\n"
-    exec < /dev/tty && node_modules/.bin/cz --hook || true
+    exec </dev/tty && node_modules/.bin/cz --hook || true
 else
     echo -e "Cz not running in a tty, skipping...\n"
     true

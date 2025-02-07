@@ -3,7 +3,7 @@ name: CI/CD_BRANCH
 on:
   pull_request:
     branches:
-      - "**"
+      - '**'
 
 jobs:
   check_branch_convention:
@@ -13,7 +13,7 @@ jobs:
       - uses: deepakputhraya/action-branch-name@master
         with:
           regex: '([a-z])+\/([a-zA-Z_-])+'
-          allowed_prefixes: "feature,stable,fix,chore,docs,feat,build,ci,test,refactor,perf"
+          allowed_prefixes: 'feature,stable,fix,chore,docs,feat,build,ci,test,refactor,perf'
           ignore: main,stage,develop
           min_length: 4
           max_length: 120

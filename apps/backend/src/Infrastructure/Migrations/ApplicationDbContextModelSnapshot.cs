@@ -23,6 +23,33 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Joins.RolePermission", b =>
+                {
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permission_id");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_on_utc");
+
+                    b.HasKey("PermissionId", "RoleId")
+                        .HasName("pk_role_permissions");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_permissions_role_id");
+
+                    b.ToTable("role_permissions", "public");
+                });
+
             modelBuilder.Entity("Domain.Joins.UserRole", b =>
                 {
                     b.Property<Guid>("RoleId")
@@ -33,17 +60,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_on_utc");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_active");
-
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("updated_on_utc");
 
                     b.HasKey("RoleId", "UserId")
                         .HasName("pk_user_roles");
@@ -54,6 +77,40 @@ namespace Infrastructure.Migrations
                     b.ToTable("user_roles", "public");
                 });
 
+            modelBuilder.Entity("Domain.Permissions.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("created_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("updated_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permissions");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_permissions_name");
+
+                    b.ToTable("permissions", "public");
+                });
+
             modelBuilder.Entity("Domain.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,27 +118,21 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamptz")
-                        .HasColumnName("created_at")
+                        .HasColumnName("created_on_utc")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedOnUtc")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("timestamptz")
-                        .HasColumnName("updated_at")
+                        .HasColumnName("updated_on_utc")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id")
@@ -102,8 +153,16 @@ namespace Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("created_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("updated_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -125,6 +184,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("created_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
                     b.Property<DateTime>("ExpiredOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expired_on_utc");
@@ -134,6 +199,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("token");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("updated_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -159,10 +230,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamptz")
-                        .HasColumnName("created_at")
+                        .HasColumnName("created_on_utc")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Email")
@@ -174,21 +245,25 @@ namespace Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("email_verified");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedOnUtc")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("timestamptz")
-                        .HasColumnName("updated_at")
+                        .HasColumnName("updated_on_utc")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id")
@@ -199,6 +274,27 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_users_email");
 
                     b.ToTable("users", "public");
+                });
+
+            modelBuilder.Entity("Domain.Joins.RolePermission", b =>
+                {
+                    b.HasOne("Domain.Permissions.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permissions_permissions_permission_id");
+
+                    b.HasOne("Domain.Roles.Role", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permissions_roles_role_id");
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Domain.Joins.UserRole", b =>
@@ -246,8 +342,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Permissions.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
             modelBuilder.Entity("Domain.Roles.Role", b =>
                 {
+                    b.Navigation("RolePermissions");
+
                     b.Navigation("UserRoles");
                 });
 

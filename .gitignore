@@ -20,6 +20,7 @@ riderModule.iml
 _ReSharper.Caches/
 *.binlog
 *.DotSettings.user
+efbundle
 
 # Next.js
 .next/

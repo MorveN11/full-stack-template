@@ -13,16 +13,17 @@
 ```json
 {
   "name": "template",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": false,
   "description": "A Fullstack Template for .NET 9 and Next.js",
   "scripts": {
     "dev": "pnpm --parallel dev",
     "restore": "pnpm -F=backend restore",
     "build": "pnpm --parallel build",
-    "publish": "pnpm -F=backend publish",
+    "publish": "pnpm run -F=backend publish",
     "migrate:add": "pnpm -F=backend migrate:add",
-    "migrate:sql": "pnpm -F=backend migrate:sql",
+    "ef:insatll": "pnpm -F=backend ef:install",
+    "ef:bundle": "pnpm -F=backend ef:bundle",
     "lint": "pnpm -F=frontend lint",
     "format": "pnpm -F=frontend format",
     "prepare": "husky"
@@ -57,6 +58,28 @@ Remove `CHANGELOG.md` file to reset the changelog record.
 
 Remove `LICENSE` file to reset the license, use your own license.
 
+## Set Production Migrations
+
+For production, you can use the `ef:bundle` command to bundle the migrations
+into a single migration. This will allow you to deploy the application with a
+single migration file. To execute the command, run the following:
+
+```sh
+pnpm ef:bundle
+```
+
+To execute this in a CI/CD pipeline, only uncomment this:
+
+```yaml
+# TODO: If you are going to Deploy your API, you can run the migrations here for your production database
+# Only you need to add the connection string to your secrets
+# - name: Run EF Migrations
+#   run: ./efbundle --connection "${{ secrets.DB_CONNECTION_STRING }}"
+```
+
+In the `.github/workflows/release.yml` file, uncomment the section that runs the
+migrations and set you DB_CONNECTION_STRING in your GitHub Secrets.
+
 ## Scripts
 
 - **dev**: Starts frontend and backend in Development Configuration.
@@ -89,11 +112,16 @@ Remove `LICENSE` file to reset the license, use your own license.
   pnpm migrate:add <MigrationName>
   ```
 
-- **migrate:sql**: Generates a SQL script for the current migrations on the .NET
-  project.
+- **ef:install**: Installs the Entity Framework tools.
 
   ```sh
-  pnpm migrate:sql
+  pnpm ef:install
+  ```
+
+- **ef:bundle**: Bundles the Entity Framework tools.
+
+  ```sh
+  pnpm ef:bundle
   ```
 
 - **lint**: Lints the frontend project.

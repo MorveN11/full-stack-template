@@ -1,20 +1,37 @@
 using System.IdentityModel.Tokens.Jwt;
 using Application.Abstractions.Services;
-using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 using SharedKernel.Time;
 
 namespace Infrastructure.Services;
 
 internal sealed class CacheService(
-    IOutputCacheStore cacheStore,
+    HybridCache hybridCache,
     IDistributedCache distributedCache,
     IDateTimeProvider timeProvider
 ) : ICacheService
 {
+    public async Task<T> GetOrCreateAsync<T>(
+        string key,
+        Func<CancellationToken, ValueTask<T>> factory,
+        IEnumerable<string> tags,
+        CancellationToken cancellationToken = default
+    )
+    {
+        T result = await hybridCache.GetOrCreateAsync(
+            key,
+            factory,
+            tags: tags,
+            cancellationToken: cancellationToken
+        );
+
+        return result;
+    }
+
     public async Task EvictByTagAsync(string tag, CancellationToken cancellationToken = default)
     {
-        await cacheStore.EvictByTagAsync(tag, cancellationToken);
+        await hybridCache.RemoveByTagAsync(tag, cancellationToken);
     }
 
     public async Task BlacklistTokenAsync(
