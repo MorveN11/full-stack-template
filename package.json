@@ -9,7 +9,7 @@
     "build": "pnpm --parallel build",
     "publish": "pnpm run -F=backend publish",
     "migrate:add": "pnpm -F=backend migrate:add",
-    "ef:insatll": "pnpm -F=backend ef:install",
+    "ef:install": "pnpm -F=backend ef:install",
     "ef:bundle": "pnpm -F=backend ef:bundle",
     "lint": "pnpm -F=frontend lint",
     "format": "pnpm -F=frontend format",
