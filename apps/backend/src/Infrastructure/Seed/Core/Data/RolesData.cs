@@ -15,8 +15,8 @@ internal sealed class RolesData(IDateTimeProvider timeProvider)
         [
             new Role
             {
-                Id = RolesId.User,
-                Name = "User",
+                Id = Role.UserId,
+                Name = Role.User,
                 RolePermissions =
                 [
                     new RolePermission
@@ -49,8 +49,8 @@ internal sealed class RolesData(IDateTimeProvider timeProvider)
             },
             new Role
             {
-                Id = RolesId.Admin,
-                Name = "Admin",
+                Id = Role.AdminId,
+                Name = Role.Admin,
                 RolePermissions =
                 [
                     new RolePermission

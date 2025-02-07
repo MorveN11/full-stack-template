@@ -26,16 +26,6 @@ internal sealed class RegisterUserCommandHandler(
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
         }
 
-        Role? defaultRole = await context
-            .Roles.AsNoTracking()
-            .Where(r => r.Name == "User")
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (defaultRole == null)
-        {
-            return Result.Failure<Guid>(UserErrors.DefaultRoleNotFound);
-        }
-
         var user = new User
         {
             Email = command.Email,
@@ -44,7 +34,7 @@ internal sealed class RegisterUserCommandHandler(
             PasswordHash = passwordHasher.Hash(command.Password),
             UserRoles =
             [
-                new UserRole { RoleId = defaultRole.Id, CreatedOnUtc = timeProvider.UtcNow },
+                new UserRole { RoleId = Role.UserId, CreatedOnUtc = timeProvider.UtcNow },
             ],
             CreatedOnUtc = timeProvider.UtcNow,
         };

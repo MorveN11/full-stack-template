@@ -31,8 +31,10 @@ public static class ClaimsPrincipalExtensions
 
     public static List<string> GetRoles(this ClaimsPrincipal? principal)
     {
-        string? roles = principal?.FindFirstValue("user_roles");
+        List<string> roles =
+            principal?.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList()
+            ?? [];
 
-        return roles?.Split(',').ToList() ?? [];
+        return roles;
     }
 }

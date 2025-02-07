@@ -1,5 +1,6 @@
 using Application.Abstractions.Authentication;
 using Domain.Joins;
+using Domain.Roles;
 using Domain.Users;
 using Infrastructure.Seed.Abstractions;
 using Infrastructure.Seed.Core.Ids;
@@ -24,7 +25,7 @@ internal sealed class UsersData(IPasswordHasher passwordHasher, IDateTimeProvide
                 EmailVerified = true,
                 UserRoles =
                 [
-                    new UserRole { RoleId = RolesId.User, CreatedOnUtc = timeProvider.UtcNow },
+                    new UserRole { RoleId = Role.UserId, CreatedOnUtc = timeProvider.UtcNow },
                 ],
                 CreatedOnUtc = timeProvider.UtcNow,
             },
@@ -38,7 +39,8 @@ internal sealed class UsersData(IPasswordHasher passwordHasher, IDateTimeProvide
                 EmailVerified = true,
                 UserRoles =
                 [
-                    new UserRole { RoleId = RolesId.Admin, CreatedOnUtc = timeProvider.UtcNow },
+                    new UserRole { RoleId = Role.AdminId, CreatedOnUtc = timeProvider.UtcNow },
+                    new UserRole { RoleId = Role.UserId, CreatedOnUtc = timeProvider.UtcNow },
                 ],
                 CreatedOnUtc = timeProvider.UtcNow,
             },

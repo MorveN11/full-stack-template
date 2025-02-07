@@ -23,16 +23,20 @@ internal sealed class TokenProvider(IConfiguration configuration, IDateTimeProvi
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        var roleName = user.Roles.Select(r => r.Name).ToList();
+
+        List<Claim> claims =
+        [
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new("email_verified", user.EmailVerified.ToString()),
+        ];
+
+        claims.AddRange(roleName.Select(r => new Claim(ClaimTypes.Role, r)));
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(
-                [
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("email_verified", user.EmailVerified.ToString()),
-                    new Claim("user_roles", string.Join(",", user.Roles.Select(r => r.Name))),
-                ]
-            ),
+            Subject = new ClaimsIdentity(claims),
             Expires = timeProvider.UtcNow.AddMinutes(
                 configuration.GetValue<int>("Jwt:ExpirationInMinutes")
             ),
