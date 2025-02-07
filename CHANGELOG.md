@@ -1,5 +1,17 @@
 # Changelog
 
+# [1.4.0](https://github.com/MorveN11/full-stack-template/compare/v1.3.0...v1.4.0) (2025-02-07)
+
+
+### Bug Fixes
+
+* update package json ef install script ([a609960](https://github.com/MorveN11/full-stack-template/commit/a6099603bcca3fdbd4eb7f3da407b068cb70f578))
+
+
+### Features
+
+* add dockerfile for nextjs ([fe1277b](https://github.com/MorveN11/full-stack-template/commit/fe1277bba089b7602a851cc0666fddba6b76f2d7))
+
 # [1.3.0](https://github.com/MorveN11/full-stack-template/compare/v1.2.0...v1.3.0) (2025-02-05)
 
 
