@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/MorveN11/full-stack-template/compare/v1.4.0...v1.4.1) (2025-02-07)
+
+
+### Bug Fixes
+
+* fix get roles for user jwt token ([b32f53a](https://github.com/MorveN11/full-stack-template/commit/b32f53aaac179c98cb170bc6caf4e305cdc6b220))
+
 # [1.4.0](https://github.com/MorveN11/full-stack-template/compare/v1.3.0...v1.4.0) (2025-02-07)
 
 
