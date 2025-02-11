@@ -264,7 +264,7 @@ public static class DependencyInjection
             configuration["Email:Sender"]
         );
 
-        if (environment.IsDevelopment() || environment.IsStaging())
+        if (environment.IsDevelopment())
         {
             builder.AddSmtpSender(
                 configuration["Email:Host"],

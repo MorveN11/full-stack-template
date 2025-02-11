@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY package.json ./
 
-RUN npm install
+RUN yarn install
 
 FROM base AS builder
 
@@ -18,18 +18,17 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
 
 ARG NEXT_PUBLIC_API_PATH
 
-RUN npm run build
+RUN yarn run build
 
 FROM base AS runner
 
 WORKDIR /app
 
-ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
