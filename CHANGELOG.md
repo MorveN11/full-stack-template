@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.7.0](https://github.com/MorveN11/full-stack-template/compare/v1.6.0...v1.7.0) (2025-02-25)
+
+
+### Features
+
+* add Docker compose scripts for development and staging environments ([5b23d94](https://github.com/MorveN11/full-stack-template/commit/5b23d94bbf1737884fc669cc9bd8a2a094b56040))
+
 # [1.6.0](https://github.com/MorveN11/full-stack-template/compare/v1.5.1...v1.6.0) (2025-02-25)
 
 
