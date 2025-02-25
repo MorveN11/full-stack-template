@@ -12,7 +12,7 @@ internal sealed class GetSessionsById : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "users/{userId:guid}/sessions",
+                "auth/users/{userId:guid}/sessions",
                 async (Guid userId, ISender sender, CancellationToken cancellationToken) =>
                 {
                     var query = new GetUserSessionsByIdQuery(userId);

@@ -25,14 +25,14 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
 
+app.MapEndpoints(app.MapGroup("/api"));
+
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwaggerWithUi();
 
     await app.ApplyMigrations();
 }
-
-app.MapEndpoints();
 
 app.MapHealthChecks(
     "/health",

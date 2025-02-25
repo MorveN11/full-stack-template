@@ -156,7 +156,9 @@ migrations and set you DB_CONNECTION_STRING in your GitHub Secrets.
   pnpm prepare
   ```
 
-## Ports - localhost
+## Ports
+
+### Development
 
 - **Frontend**: 3000
 - **API**: 5001
@@ -164,4 +166,12 @@ migrations and set you DB_CONNECTION_STRING in your GitHub Secrets.
 - **Postgres**: 5432
 - **Redis**: 6379
 - **Papercut**: 8080
-- **Seq**: 8081
+
+### Staging
+
+- **Frontend**: 80
+- **API**: 5001
+  - **Swagger**: /swagger/index.html
+- **Postgres**: 5432
+- **Redis**: 6379
+- **Papercut**: 8080
