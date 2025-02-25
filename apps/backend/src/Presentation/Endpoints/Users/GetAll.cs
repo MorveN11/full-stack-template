@@ -14,7 +14,7 @@ internal sealed class GetAll : IEndpoint
     {
         _ = app.MapGet(
                 "users",
-                static async (
+                async (
                     ISender sender,
                     CancellationToken cancellationToken,
                     int page = 1,

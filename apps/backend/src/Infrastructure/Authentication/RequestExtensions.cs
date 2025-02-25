@@ -17,4 +17,14 @@ internal static class RequestExtensions
             ? bearerToken["Bearer ".Length..]
             : throw new ApplicationException("JWT token is unavailable");
     }
+
+    public static string? GetIpAddress(this HttpRequest request)
+    {
+        return request.HttpContext.Connection.RemoteIpAddress?.ToString();
+    }
+
+    public static string? GetUserAgent(this HttpRequest request)
+    {
+        return request.Headers.UserAgent;
+    }
 }

@@ -1,4 +1,5 @@
 using Application.Abstractions.Authentication;
+using Domain.Enums;
 using Domain.Joins;
 using Domain.Roles;
 using Domain.Users;
@@ -23,6 +24,7 @@ internal sealed class UsersData(IPasswordHasher passwordHasher, IDateTimeProvide
                 LastName = "user",
                 PasswordHash = passwordHasher.Hash("user"),
                 EmailVerified = true,
+                Status = UserStatus.Active,
                 UserRoles =
                 [
                     new UserRole { RoleId = Role.UserId, CreatedOnUtc = timeProvider.UtcNow },
@@ -37,6 +39,7 @@ internal sealed class UsersData(IPasswordHasher passwordHasher, IDateTimeProvide
                 LastName = "admin",
                 PasswordHash = passwordHasher.Hash("admin"),
                 EmailVerified = true,
+                Status = UserStatus.Active,
                 UserRoles =
                 [
                     new UserRole { RoleId = Role.AdminId, CreatedOnUtc = timeProvider.UtcNow },

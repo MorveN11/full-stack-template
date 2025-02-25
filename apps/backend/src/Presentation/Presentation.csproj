@@ -8,7 +8,6 @@
     </PackageReference>
     <PackageReference Include="oqo0.SwaggerThemes" />
     <PackageReference Include="Serilog.AspNetCore" />
-    <PackageReference Include="Serilog.Sinks.Seq" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 

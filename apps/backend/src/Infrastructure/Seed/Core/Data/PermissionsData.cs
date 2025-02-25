@@ -14,6 +14,12 @@ internal sealed class PermissionsData(IDateTimeProvider timeProvider)
         [
             new Permission
             {
+                Id = PermissionsId.CreateUsers,
+                Name = "users:create",
+                CreatedOnUtc = timeProvider.UtcNow,
+            },
+            new Permission
+            {
                 Id = PermissionsId.ReadUsers,
                 Name = "users:read",
                 CreatedOnUtc = timeProvider.UtcNow,
@@ -38,8 +44,14 @@ internal sealed class PermissionsData(IDateTimeProvider timeProvider)
             },
             new Permission
             {
-                Id = PermissionsId.RevokeTokensUsers,
-                Name = "users:revoketokens",
+                Id = PermissionsId.FinishSessions,
+                Name = "users:finish_sessions",
+                CreatedOnUtc = timeProvider.UtcNow,
+            },
+            new Permission
+            {
+                Id = PermissionsId.GetSessions,
+                Name = "users:get_sessions",
                 CreatedOnUtc = timeProvider.UtcNow,
             },
             new Permission
@@ -68,8 +80,14 @@ internal sealed class PermissionsData(IDateTimeProvider timeProvider)
             },
             new Permission
             {
-                Id = PermissionsId.RevokeTokensSelfUser,
-                Name = "users:revoketokens:self",
+                Id = PermissionsId.FinishSelfSessions,
+                Name = "users:finish_sessions:self",
+                CreatedOnUtc = timeProvider.UtcNow,
+            },
+            new Permission
+            {
+                Id = PermissionsId.GetSelfSessions,
+                Name = "users:get_sessions:self",
                 CreatedOnUtc = timeProvider.UtcNow,
             },
         ];

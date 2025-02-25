@@ -3,12 +3,10 @@ using System.Text;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
-using Application.Abstractions.Factories;
 using Application.Abstractions.Services;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Database;
-using Infrastructure.Factories;
 using Infrastructure.Seed;
 using Infrastructure.Seed.Abstractions;
 using Infrastructure.Services;
@@ -48,8 +46,6 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
-        services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
 
         services.AddScoped<ICacheService, CacheService>();
 
@@ -264,7 +260,7 @@ public static class DependencyInjection
             configuration["Email:Sender"]
         );
 
-        if (environment.IsDevelopment())
+        if (environment.IsDevelopment() || environment.IsStaging())
         {
             builder.AddSmtpSender(
                 configuration["Email:Host"],

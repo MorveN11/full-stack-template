@@ -7,6 +7,14 @@ public static class UserErrors
     public static Error NotFound(Guid userId) =>
         Error.NotFound("Users.NotFound", $"The user with ID {userId} was not found");
 
+    public static Error NotFound(string email) =>
+        Error.NotFound("Users.NotFound", $"The user with email {email} was not found");
+
+    public static readonly Error EmailAlreadyVerified = Error.Conflict(
+        "Users.EmailAlreadyVerified",
+        "The email address is already verified"
+    );
+
     public static readonly Error EmailNotUnique = Error.Conflict(
         "Users.EmailNotUnique",
         "The provided email is not unique"
@@ -27,8 +35,8 @@ public static class UserErrors
         "The email address is not verified"
     );
 
-    public static readonly Error DefaultRoleNotFound = Error.NotFound(
-        "Users.DefaultRoleNotFound",
-        "The default role was not found"
+    public static readonly Error SessionNotFound = Error.NotFound(
+        "Users.SessionNotFound",
+        "The session was not found"
     );
 }

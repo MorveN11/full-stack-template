@@ -1,4 +1,4 @@
-using Domain.Tokens;
+using Domain.RefreshTokens;
 using Infrastructure.Database.Configurations.Abstractions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

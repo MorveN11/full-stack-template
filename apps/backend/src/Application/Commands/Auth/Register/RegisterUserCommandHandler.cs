@@ -1,8 +1,8 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Joins;
-using Domain.Roles;
+using Application.Commands.Auth.Register.Strategies;
+using Domain.Enums;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
@@ -21,30 +21,25 @@ internal sealed class RegisterUserCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        if (await context.Users.AnyAsync(u => u.Email == command.Email, cancellationToken))
+        User? user = await context.Users.SingleOrDefaultAsync(
+            u => u.Email == command.Email,
+            cancellationToken
+        );
+
+        if (user != null && user.Status != UserStatus.Pending)
         {
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
         }
 
-        var user = new User
-        {
-            Email = command.Email,
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            PasswordHash = passwordHasher.Hash(command.Password),
-            UserRoles =
-            [
-                new UserRole { RoleId = Role.UserId, CreatedOnUtc = timeProvider.UtcNow },
-            ],
-            CreatedOnUtc = timeProvider.UtcNow,
-        };
+        IRegisterUser registerUser =
+            user != null
+                ? new RegisterPendingUser(context, passwordHasher, timeProvider, user)
+                : new RegisterNewUser(context, passwordHasher, timeProvider);
 
-        user.Raise(new UserRegisteredDomainEvent(user.Id, user.Email));
-
-        context.Users.Add(user);
+        Guid userId = registerUser.RegisterUser(command);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return user.Id;
+        return userId;
     }
 }

@@ -4,6 +4,8 @@ using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Services;
 using Domain.Authorization;
+using Domain.RefreshTokens;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -29,9 +31,19 @@ internal sealed class LogoutUserCommandHandler(
             return Result.Failure(authorizationResult.Error);
         }
 
-        await context
-            .RefreshTokens.Where(r => r.UserId == command.UserId)
-            .ExecuteDeleteAsync(cancellationToken);
+        RefreshToken? refreshToken = await context.RefreshTokens.SingleOrDefaultAsync(
+            r => r.UserId == command.UserId && r.Token == command.RefreshToken,
+            cancellationToken
+        );
+
+        if (refreshToken is null)
+        {
+            return Result.Failure(UserErrors.SessionNotFound);
+        }
+
+        context.RefreshTokens.Remove(refreshToken);
+
+        await context.SaveChangesAsync(cancellationToken);
 
         string jwt = userContext.Jwt;
 

@@ -17,12 +17,9 @@ internal sealed class Login : IEndpoint
                 "auth/login",
                 async (Request request, ISender sender, CancellationToken cancellationToken) =>
                 {
-                    var command = new LoginUserCommand(request.Email, request.Password);
+                    var command = new LoginCommand(request.Email, request.Password);
 
-                    Result<LoginUserResponse> result = await sender.Send(
-                        command,
-                        cancellationToken
-                    );
+                    Result<LoginResponse> result = await sender.Send(command, cancellationToken);
 
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }

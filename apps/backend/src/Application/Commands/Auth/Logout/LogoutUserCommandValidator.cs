@@ -7,5 +7,7 @@ internal sealed class LogoutUserCommandValidator : AbstractValidator<LogoutUserC
     public LogoutUserCommandValidator()
     {
         RuleFor(x => x.UserId).NotEmpty();
+
+        RuleFor(x => x.RefreshToken).NotEmpty();
     }
 }

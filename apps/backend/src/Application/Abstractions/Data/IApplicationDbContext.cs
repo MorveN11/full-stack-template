@@ -1,7 +1,9 @@
 ﻿using Domain.Joins;
+using Domain.OtpCodes;
 using Domain.Permissions;
+using Domain.RefreshTokens;
 using Domain.Roles;
-using Domain.Tokens;
+using Domain.UserProfiles;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +16,9 @@ public interface IApplicationDbContext
     DbSet<Role> Roles { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Permission> Permissions { get; }
-    DbSet<EmailVerificationToken> EmailVerificationTokens { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<OtpCode> OtpCodes { get; }
+    DbSet<UserProfile> UserProfiles { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

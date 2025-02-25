@@ -9,5 +9,7 @@ internal sealed class UserConfiguration : EntityConfiguration<User>
     protected override void ConfigureEntity(EntityTypeBuilder<User> builder)
     {
         builder.HasIndex(u => u.Email).IsUnique();
+
+        builder.Property(u => u.Status).HasConversion<int>();
     }
 }

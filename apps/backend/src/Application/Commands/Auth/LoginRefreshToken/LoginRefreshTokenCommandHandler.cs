@@ -1,7 +1,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Tokens;
+using Domain.RefreshTokens;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;
@@ -22,7 +22,7 @@ internal sealed class LoginRefreshTokenCommandHandler(
         RefreshToken? refreshToken = await context
             .RefreshTokens.Include(r => r.User)
             .ThenInclude(u => u.Roles)
-            .FirstOrDefaultAsync(r => r.Token == command.RefreshToken, cancellationToken);
+            .SingleOrDefaultAsync(r => r.Token == command.RefreshToken, cancellationToken);
 
         if (refreshToken is null || refreshToken.ExpiredOnUtc < timeProvider.UtcNow)
         {

@@ -1,8 +1,10 @@
 using Application.Abstractions.Data;
 using Domain.Joins;
+using Domain.OtpCodes;
 using Domain.Permissions;
+using Domain.RefreshTokens;
 using Domain.Roles;
-using Domain.Tokens;
+using Domain.UserProfiles;
 using Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +22,9 @@ public sealed class ApplicationDbContext(
     public DbSet<Role> Roles { get; init; }
     public DbSet<RolePermission> RolePermissions { get; init; }
     public DbSet<Permission> Permissions { get; init; }
-    public DbSet<EmailVerificationToken> EmailVerificationTokens { get; init; }
     public DbSet<RefreshToken> RefreshTokens { get; init; }
+    public DbSet<OtpCode> OtpCodes { get; init; }
+    public DbSet<UserProfile> UserProfiles { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

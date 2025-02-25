@@ -26,7 +26,7 @@ internal sealed class GetAllUsersQueryHandler(
             .AsSplitQuery()
             .Include(u => u.Roles)
             .ThenInclude(r => r.Permissions)
-            .OrderByDescending(u => u.UpdatedOnUtc)
+            .OrderByDescending(u => u.CreatedOnUtc)
             .Select(u => new UserResponse
             {
                 Id = u.Id,

@@ -13,4 +13,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\Auth\ForgotPassword\" />
+    <Folder Include="Commands\Auth\ResetPassword\" />
+  </ItemGroup>
+
 </Project>

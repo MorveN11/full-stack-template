@@ -41,7 +41,12 @@ internal sealed class RolesData(IDateTimeProvider timeProvider)
                     },
                     new RolePermission
                     {
-                        PermissionId = PermissionsId.RevokeTokensSelfUser,
+                        PermissionId = PermissionsId.FinishSelfSessions,
+                        CreatedOnUtc = timeProvider.UtcNow,
+                    },
+                    new RolePermission
+                    {
+                        PermissionId = PermissionsId.GetSelfSessions,
                         CreatedOnUtc = timeProvider.UtcNow,
                     },
                 ],
@@ -53,6 +58,11 @@ internal sealed class RolesData(IDateTimeProvider timeProvider)
                 Name = Role.Admin,
                 RolePermissions =
                 [
+                    new RolePermission
+                    {
+                        PermissionId = PermissionsId.CreateUsers,
+                        CreatedOnUtc = timeProvider.UtcNow,
+                    },
                     new RolePermission
                     {
                         PermissionId = PermissionsId.ReadUsers,
@@ -75,7 +85,12 @@ internal sealed class RolesData(IDateTimeProvider timeProvider)
                     },
                     new RolePermission
                     {
-                        PermissionId = PermissionsId.RevokeTokensUsers,
+                        PermissionId = PermissionsId.FinishSessions,
+                        CreatedOnUtc = timeProvider.UtcNow,
+                    },
+                    new RolePermission
+                    {
+                        PermissionId = PermissionsId.GetSessions,
                         CreatedOnUtc = timeProvider.UtcNow,
                     },
                 ],

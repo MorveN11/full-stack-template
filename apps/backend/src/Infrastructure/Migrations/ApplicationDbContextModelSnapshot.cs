@@ -77,6 +77,64 @@ namespace Infrastructure.Migrations
                     b.ToTable("user_roles", "public");
                 });
 
+            modelBuilder.Entity("Domain.OtpCodes.OtpCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("created_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime>("ExpiredOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expired_on_utc");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("updated_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("boolean")
+                        .HasColumnName("used");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("boolean")
+                        .HasColumnName("verified");
+
+                    b.HasKey("Id")
+                        .HasName("pk_otp_codes");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("ix_otp_codes_code");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_otp_codes_user_id");
+
+                    b.ToTable("otp_codes", "public");
+                });
+
             modelBuilder.Entity("Domain.Permissions.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -109,6 +167,60 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_permissions_name");
 
                     b.ToTable("permissions", "public");
+                });
+
+            modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("created_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime>("ExpiredOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expired_on_utc");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("ip_address");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("token");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamptz")
+                        .HasColumnName("updated_on_utc")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("text")
+                        .HasColumnName("user_agent");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_refresh_tokens");
+
+                    b.HasIndex("Token")
+                        .IsUnique()
+                        .HasDatabaseName("ix_refresh_tokens_token");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_refresh_tokens_user_id");
+
+                    b.ToTable("refresh_tokens", "public");
                 });
 
             modelBuilder.Entity("Domain.Roles.Role", b =>
@@ -145,7 +257,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("roles", "public");
                 });
 
-            modelBuilder.Entity("Domain.Tokens.EmailVerificationToken", b =>
+            modelBuilder.Entity("Domain.UserProfiles.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,6 +270,10 @@ namespace Infrastructure.Migrations
                         .HasColumnName("created_on_utc")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("picture_url");
+
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("timestamptz")
@@ -169,58 +285,13 @@ namespace Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_email_verification_tokens");
+                        .HasName("pk_user_profiles");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_email_verification_tokens_user_id");
-
-                    b.ToTable("email_verification_tokens", "public");
-                });
-
-            modelBuilder.Entity("Domain.Tokens.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamptz")
-                        .HasColumnName("created_on_utc")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<DateTime>("ExpiredOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expired_on_utc");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("token");
-
-                    b.Property<DateTime?>("UpdatedOnUtc")
-                        .ValueGeneratedOnUpdate()
-                        .HasColumnType("timestamptz")
-                        .HasColumnName("updated_on_utc")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_refresh_tokens");
-
-                    b.HasIndex("Token")
                         .IsUnique()
-                        .HasDatabaseName("ix_refresh_tokens_token");
+                        .HasDatabaseName("ix_user_profiles_user_id");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_refresh_tokens_user_id");
-
-                    b.ToTable("refresh_tokens", "public");
+                    b.ToTable("user_profiles", "public");
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
@@ -259,6 +330,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .ValueGeneratedOnUpdate()
@@ -318,19 +393,19 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Tokens.EmailVerificationToken", b =>
+            modelBuilder.Entity("Domain.OtpCodes.OtpCode", b =>
                 {
                     b.HasOne("Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_email_verification_tokens_users_user_id");
+                        .HasConstraintName("fk_otp_codes_users_user_id");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Tokens.RefreshToken", b =>
+            modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
                 {
                     b.HasOne("Domain.Users.User", "User")
                         .WithMany()
@@ -338,6 +413,18 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_refresh_tokens_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.UserProfiles.UserProfile", b =>
+                {
+                    b.HasOne("Domain.Users.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("Domain.UserProfiles.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_profiles_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -356,6 +443,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Users.User", b =>
                 {
+                    b.Navigation("Profile");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

@@ -24,4 +24,8 @@ internal sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IU
     public List<string> Roles =>
         httpContextAccessor.HttpContext?.User.GetRoles()
         ?? throw new ApplicationException("User context is unavailable");
+
+    public string? IpAddress => httpContextAccessor.HttpContext?.Request.GetIpAddress();
+
+    public string? UserAgent => httpContextAccessor.HttpContext?.Request.GetUserAgent();
 }

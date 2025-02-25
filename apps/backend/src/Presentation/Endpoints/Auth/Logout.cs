@@ -9,19 +9,15 @@ namespace Presentation.Endpoints.Auth;
 
 internal sealed class Logout : IEndpoint
 {
-    public sealed record Request(Guid UserId);
+    public sealed record Request(Guid UserId, string RefreshToken);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapPost(
                 "auth/logout",
-                static async (
-                    Request request,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) =>
+                async (Request request, ISender sender, CancellationToken cancellationToken) =>
                 {
-                    var command = new LogoutUserCommand(request.UserId);
+                    var command = new LogoutUserCommand(request.UserId, request.RefreshToken);
 
                     Result result = await sender.Send(command, cancellationToken);
 

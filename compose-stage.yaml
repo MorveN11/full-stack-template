@@ -1,0 +1,84 @@
+services:
+    papercut:
+        image: changemakerstudiosus/papercut-smtp:7.0.0-rc1
+        container_name: stage.papercut
+        ports:
+            - '8080:80'
+            - '25:25'
+        healthcheck:
+            test: [ 'CMD-SHELL', "timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/80'" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    redis:
+        image: redislabs/redismod
+        container_name: stage.redis
+        volumes:
+            - redis-data:/data
+        ports:
+            - '6379:6379'
+        healthcheck:
+            test: [ 'CMD', 'redis-cli', 'ping' ]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+    postgres:
+        image: postgres:17
+        container_name: stage.postgres
+        environment:
+            - POSTGRES_DB=postgres-db
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+        healthcheck:
+            test: [ 'CMD-SHELL', 'pg_isready -U postgres -d postgres-db' ]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+    web-api:
+        image: ${DOCKER_REGISTRY-}webapi
+        container_name: web-api
+        build:
+            context: ./apps/backend
+            dockerfile: Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+            - ASPNETCORE_HTTP_PORTS=8080
+        ports:
+            - '5001:8080'
+        depends_on:
+            papercut:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            postgres:
+                condition: service_healthy
+        healthcheck:
+            test: [ 'CMD-SHELL', "timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/8080'" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    web-client:
+        image: ${DOCKER_REGISTRY-}web-client
+        container_name: web-client
+        build:
+            context: ./apps/frontend
+            dockerfile: Dockerfile
+        environment:
+            - NEXT_PUBLIC_API_PATH=http://web-api:8080
+        ports:
+            - '80:3000'
+        depends_on:
+            web-api:
+                condition: service_healthy
+
+volumes:
+    redis-data:
+    postgres-data:

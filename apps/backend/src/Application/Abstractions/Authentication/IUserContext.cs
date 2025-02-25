@@ -11,4 +11,8 @@ public interface IUserContext
     string Jwt { get; }
 
     List<string> Roles { get; }
+
+    string? IpAddress { get; }
+
+    string? UserAgent { get; }
 }
