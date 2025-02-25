@@ -27,7 +27,7 @@ internal sealed class GetAllUsersQueryHandler(
             .AsSplitQuery()
             .Where(u => u.EmailVerified && u.Status == UserStatus.Active)
             .Include(u => u.Roles)
-            .ThenInclude(r => r.Permissions)
+            .Include(u => u.Profile)
             .OrderByDescending(u => u.CreatedOnUtc)
             .Select(u => new UserResponse
             {
@@ -35,11 +35,8 @@ internal sealed class GetAllUsersQueryHandler(
                 Email = u.Email,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
-                Roles = u.Roles.Select(r => r.Name).ToList(),
-                Permissions = u
-                    .Roles.SelectMany(r => r.Permissions)
-                    .Select(p => p.Name)
-                    .ToHashSet(),
+                ProfilePictureUrl = u.Profile != null ? u.Profile.PictureUrl : null,
+                Roles = u.Roles.Select(r => r.Name).ToHashSet(),
             });
 
         return await PagedList.CreateAsync(users, query.Page, query.PageSize, cancellationToken);

@@ -1,4 +1,3 @@
-using Application.Commands.Auth.ResetPassword;
 using Application.Commands.Users.UpdateProfilePhoto;
 using Domain.Identifiers;
 using MediatR;

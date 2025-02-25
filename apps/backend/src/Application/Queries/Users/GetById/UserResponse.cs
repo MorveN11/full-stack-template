@@ -10,7 +10,7 @@ public sealed record UserResponse
 
     public required string LastName { get; init; }
 
-    public required List<string> Roles { get; init; }
+    public required Uri? ProfilePictureUrl { get; init; }
 
-    public required HashSet<string> Permissions { get; init; }
+    public required HashSet<string> Roles { get; init; }
 }

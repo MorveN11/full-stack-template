@@ -12,7 +12,7 @@ public sealed record VerifyRegisterOtpCodeResponse
 
     public required Uri? PictureUrl { get; init; }
 
-    public required List<string> Roles { get; init; }
+    public required HashSet<string> Roles { get; init; }
 
     public required string AccessToken { get; init; }
 

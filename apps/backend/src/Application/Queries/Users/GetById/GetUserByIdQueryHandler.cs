@@ -27,7 +27,7 @@ internal sealed class GetUserByIdQueryHandler(
             .AsSplitQuery()
             .Where(u => u.Id == query.UserId && u.EmailVerified && u.Status == UserStatus.Active)
             .Include(u => u.Roles)
-            .ThenInclude(r => r.Permissions)
+            .Include(u => u.Profile)
             .SingleOrDefaultAsync(cancellationToken);
 
         if (user is null)
@@ -41,8 +41,8 @@ internal sealed class GetUserByIdQueryHandler(
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Roles = user.Roles.Select(r => r.Name).ToList(),
-            Permissions = user.Roles.SelectMany(r => r.Permissions).Select(p => p.Name).ToHashSet(),
+            ProfilePictureUrl = user.Profile?.PictureUrl,
+            Roles = user.Roles.Select(r => r.Name).ToHashSet(),
         };
     }
 

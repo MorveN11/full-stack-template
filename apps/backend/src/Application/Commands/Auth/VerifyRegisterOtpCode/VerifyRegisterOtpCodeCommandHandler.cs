@@ -94,7 +94,7 @@ internal sealed class VerifyRegisterOtpCodeCommandHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             PictureUrl = user.Profile?.PictureUrl,
-            Roles = user.Roles.Select(r => r.Name).ToList(),
+            Roles = user.Roles.Select(r => r.Name).ToHashSet(),
             AccessToken = accessToken,
             RefreshToken = refreshToken.Token,
         };

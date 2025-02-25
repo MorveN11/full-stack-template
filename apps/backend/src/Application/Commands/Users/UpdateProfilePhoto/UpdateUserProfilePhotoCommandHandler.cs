@@ -53,10 +53,12 @@ internal sealed class UpdateUserProfilePhotoCommandHandler(
 
             context.UserProfiles.Add(user.Profile);
         }
+        else
+        {
+            user.Profile.PictureUrl = command.ProfilePhotoUri;
 
-        user.Profile.PictureUrl = command.ProfilePhotoUri;
-
-        context.UserProfiles.Update(user.Profile);
+            context.UserProfiles.Update(user.Profile);
+        }
 
         await context.SaveChangesAsync(cancellationToken);
 
