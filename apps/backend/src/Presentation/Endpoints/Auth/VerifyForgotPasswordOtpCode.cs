@@ -17,12 +17,12 @@ internal sealed class VerifyForgotPasswordOtpCode : IEndpoint
                 "auth/verify-forgot-password-otp-code",
                 async (Request request, ISender sender, CancellationToken cancellationToken) =>
                 {
-                    var query = new VerifyForgotPasswordOtpCodeCommand(
+                    var command = new VerifyForgotPasswordOtpCodeCommand(
                         request.Email,
                         request.OtpCode
                     );
 
-                    Result result = await sender.Send(query, cancellationToken);
+                    Result result = await sender.Send(command, cancellationToken);
 
                     return result.Match(Results.NoContent, CustomResults.Problem);
                 }

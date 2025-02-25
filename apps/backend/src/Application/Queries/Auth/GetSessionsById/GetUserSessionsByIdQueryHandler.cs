@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;
 
-namespace Application.Queries.Users.GetSessionsById;
+namespace Application.Queries.Auth.GetSessionsById;
 
 internal sealed class GetUserSessionsByIdQueryHandler(
     IApplicationDbContext context,
@@ -17,7 +17,7 @@ internal sealed class GetUserSessionsByIdQueryHandler(
     ICacheService cacheService
 ) : IQueryHandler<GetUserSessionsByIdQuery, List<SessionResponse>>
 {
-    public async Task<Result<List<SessionResponse>>> GetUserSessionsAsync(
+    private async Task<Result<List<SessionResponse>>> GetUserSessionsAsync(
         GetUserSessionsByIdQuery query,
         CancellationToken cancellationToken = default
     )
@@ -57,7 +57,7 @@ internal sealed class GetUserSessionsByIdQueryHandler(
         return await cacheService.GetOrCreateAsync(
             $"users:sessions:{query.UserId}",
             async ct => await GetUserSessionsAsync(query, ct),
-            [Tags.Users],
+            [Tags.Auth],
             cancellationToken
         );
     }

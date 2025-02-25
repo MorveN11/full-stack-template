@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Queries.Users.GetSessionsById;
+namespace Application.Queries.Auth.GetSessionsById;
 
 internal sealed class GetUserSessionsByIdQueryValidator
     : AbstractValidator<GetUserSessionsByIdQuery>

@@ -10,15 +10,15 @@ namespace Application.Commands.Auth.SignIns;
 internal sealed class SignInsCommandHandler(IApplicationDbContext context)
     : ICommandHandler<SignInsCommand>
 {
-    public async Task<Result> Handle(SignInsCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SignInsCommand command, CancellationToken cancellationToken)
     {
         User? user = await context
             .Users.AsNoTracking()
             .SingleOrDefaultAsync(
-                x => x.Email == request.Email && x.EmailVerified && x.Status == UserStatus.Active,
+                x => x.Email == command.Email && x.EmailVerified && x.Status == UserStatus.Active,
                 cancellationToken
             );
 
-        return user is null ? Result.Failure(UserErrors.NotFound(request.Email)) : Result.Success();
+        return user is null ? Result.Failure(UserErrors.NotFound(command.Email)) : Result.Success();
     }
 }

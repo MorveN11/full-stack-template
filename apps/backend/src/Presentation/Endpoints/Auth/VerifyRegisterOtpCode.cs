@@ -17,10 +17,10 @@ internal sealed class VerifyRegisterOtpCode : IEndpoint
                 "auth/verify-register-otp-code",
                 async (Request request, ISender sender, CancellationToken cancellationToken) =>
                 {
-                    var query = new VerifyRegisterOtpCodeCommand(request.Email, request.OtpCode);
+                    var command = new VerifyRegisterOtpCodeCommand(request.Email, request.OtpCode);
 
                     Result<VerifyRegisterOtpCodeResponse> result = await sender.Send(
-                        query,
+                        command,
                         cancellationToken
                     );
 

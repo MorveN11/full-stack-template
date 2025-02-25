@@ -81,7 +81,7 @@ internal sealed class ResetPasswordCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
+        await cacheService.EvictByTagAsync(Tags.Auth, cancellationToken);
 
         return new ResetPasswordResponse()
         {

@@ -57,7 +57,7 @@ internal sealed class UpdatePasswordCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
+        await cacheService.EvictByTagAsync(Tags.Auth, cancellationToken);
 
         return Result.Success();
     }

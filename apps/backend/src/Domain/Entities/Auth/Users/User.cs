@@ -21,15 +21,8 @@ public sealed class User : Entity
     public List<Role> Roles { get; set; } = [];
     public List<UserRole> UserRoles { get; set; } = [];
 
-    public static bool IsValidUser(User? user, string email, out Error? error)
+    private static bool IsValidUser(User user, out Error? error)
     {
-        if (user is null)
-        {
-            error = UserErrors.NotFound(email);
-
-            return false;
-        }
-
         if (!user.EmailVerified)
         {
             error = UserErrors.EmailNotVerified;
@@ -47,6 +40,30 @@ public sealed class User : Entity
         error = Error.None;
 
         return true;
+    }
+
+    public static bool IsValidUser(User? user, string email, out Error? error)
+    {
+        if (user is not null)
+        {
+            return IsValidUser(user, out error);
+        }
+
+        error = UserErrors.NotFound(email);
+
+        return false;
+    }
+
+    public static bool IsValidUser(User? user, Guid userId, out Error? error)
+    {
+        if (user is not null)
+        {
+            return IsValidUser(user, out error);
+        }
+
+        error = UserErrors.NotFound(userId);
+
+        return false;
     }
 
     public static async Task<Result> SendOtpCodeAsync(

@@ -1,4 +1,4 @@
-namespace Application.Queries.Users.GetSessionsById;
+namespace Application.Queries.Auth.GetSessionsById;
 
 public sealed record SessionResponse
 {

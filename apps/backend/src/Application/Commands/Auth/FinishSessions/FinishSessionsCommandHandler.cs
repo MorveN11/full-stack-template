@@ -41,7 +41,7 @@ internal sealed class FinishSessionsCommandHandler(
 
         await cacheService.BlacklistTokenAsync(jwt, cancellationToken);
 
-        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
+        await cacheService.EvictByTagAsync(Tags.Auth, cancellationToken);
 
         return Result.Success();
     }

@@ -1,11 +1,11 @@
-using Application.Queries.Users.GetSessionsById;
+using Application.Queries.Auth.GetSessionsById;
 using Domain.Identifiers;
 using MediatR;
 using Presentation.Extensions;
 using Presentation.Infrastructure;
 using SharedKernel.Results;
 
-namespace Presentation.Endpoints.Users;
+namespace Presentation.Endpoints.Auth;
 
 internal sealed class GetSessionsById : IEndpoint
 {
@@ -26,7 +26,7 @@ internal sealed class GetSessionsById : IEndpoint
                 }
             )
             .RequireAuthorization()
-            .WithTags(Tags.Users)
+            .WithTags(Tags.Auth)
             .WithSummary("Get user sessions by id");
     }
 }
