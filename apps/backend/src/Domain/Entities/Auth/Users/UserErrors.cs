@@ -34,4 +34,9 @@ public static class UserErrors
         "Users.EmailNotVerified",
         "The email address is not verified"
     );
+
+    public static readonly Error UnableToReadFile = Error.Failure(
+        "Users.UnableToReadFile",
+        "There was a problem while reading the file"
+    );
 }

@@ -56,10 +56,15 @@ public sealed class User : Entity
         CancellationToken cancellationToken = default
     )
     {
-        string emailTemplate = await File.ReadAllTextAsync(
-            "../Domain/EmailTemplates/OtpCodeEmail.html",
-            cancellationToken
-        );
+        string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        string templatePath = Path.Combine(basePath, "EmailTemplates", "OtpCodeEmail.html");
+
+        if (!File.Exists(templatePath))
+        {
+            return Result.Failure(UserErrors.UnableToReadFile);
+        }
+
+        string emailTemplate = await File.ReadAllTextAsync(templatePath, cancellationToken);
 
         emailTemplate = emailTemplate.Replace("{{otpCode}}", otpCode);
 

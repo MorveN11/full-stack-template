@@ -46,8 +46,6 @@ internal sealed class ForgotPasswordCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        await User.SendOtpCodeAsync(emailService, command.Email, otpCode, cancellationToken);
-
-        return Result.Success();
+        return await User.SendOtpCodeAsync(emailService, command.Email, otpCode, cancellationToken);
     }
 }

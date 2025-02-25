@@ -5,7 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EmailTemplates\" />
+    <None Include="EmailTemplates\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
