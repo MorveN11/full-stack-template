@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.9.0](https://github.com/MorveN11/full-stack-template/compare/v1.8.0...v1.9.0) (2025-02-25)
+
+
+### Bug Fixes
+
+* add format to shadcn components ([53ce1b6](https://github.com/MorveN11/full-stack-template/commit/53ce1b60c4e1d0589e082245d848b23e2092b9b0))
+
+
+### Features
+
+* add healthcheck to frontend ([4c9b830](https://github.com/MorveN11/full-stack-template/commit/4c9b830bd8f7edac3d8311081e7b84a8e3a2a24d))
+* update default layout for frontend ([cad4ca8](https://github.com/MorveN11/full-stack-template/commit/cad4ca8d2bb8a622ed974fc67ff8bcc62cb2d225))
+
 # [1.8.0](https://github.com/MorveN11/full-stack-template/compare/v1.7.2...v1.8.0) (2025-02-25)
 
 
