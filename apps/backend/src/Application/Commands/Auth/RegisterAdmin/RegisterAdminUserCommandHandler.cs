@@ -4,9 +4,11 @@ using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Commands.Auth.RegisterAdmin.Strategies;
 using Domain.Authorization;
+using Domain.Entities.Auth.Roles;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
-using Domain.Roles;
-using Domain.Users;
+using Domain.Identifiers;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;
@@ -17,7 +19,8 @@ internal sealed class RegisterAdminUserCommandHandler(
     IApplicationDbContext context,
     IPasswordHasher passwordHasher,
     IDateTimeProvider timeProvider,
-    IAuthorizationHandler authorizationHandler
+    IAuthorizationHandler authorizationHandler,
+    ICacheService cacheService
 ) : ICommandHandler<RegisterAdminUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
@@ -40,7 +43,7 @@ internal sealed class RegisterAdminUserCommandHandler(
             cancellationToken
         );
 
-        if (user != null && user.Status != UserStatus.Pending)
+        if (user != null && (user.EmailVerified || user.Status != UserStatus.Pending))
         {
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
         }
@@ -70,6 +73,8 @@ internal sealed class RegisterAdminUserCommandHandler(
         Guid userId = await registerUser.RegisterUserAsync(command, roles, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
 
         return userId;
     }

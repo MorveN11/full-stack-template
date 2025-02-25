@@ -2,8 +2,8 @@ using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Commands.Auth.Register.Strategies;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;
@@ -26,7 +26,7 @@ internal sealed class RegisterUserCommandHandler(
             cancellationToken
         );
 
-        if (user != null && user.Status != UserStatus.Pending)
+        if (user != null && (user.EmailVerified || user.Status != UserStatus.Pending))
         {
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
         }

@@ -2,9 +2,10 @@ using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Responses;
-using Application.Abstractions.Services;
 using Domain.Authorization;
+using Domain.Enums;
 using Domain.Identifiers;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -24,6 +25,7 @@ internal sealed class GetAllUsersQueryHandler(
         IQueryable<UserResponse> users = context
             .Users.AsNoTracking()
             .AsSplitQuery()
+            .Where(u => u.EmailVerified && u.Status == UserStatus.Active)
             .Include(u => u.Roles)
             .ThenInclude(r => r.Permissions)
             .OrderByDescending(u => u.CreatedOnUtc)

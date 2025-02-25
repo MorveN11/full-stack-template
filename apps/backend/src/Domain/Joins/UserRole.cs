@@ -1,5 +1,5 @@
-using Domain.Roles;
-using Domain.Users;
+using Domain.Entities.Auth.Roles;
+using Domain.Entities.Auth.Users;
 using SharedKernel.Domain;
 
 namespace Domain.Joins;

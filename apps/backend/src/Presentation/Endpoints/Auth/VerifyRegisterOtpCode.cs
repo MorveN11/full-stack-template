@@ -19,9 +19,12 @@ internal sealed class VerifyRegisterOtpCode : IEndpoint
                 {
                     var query = new VerifyRegisterOtpCodeCommand(request.Email, request.OtpCode);
 
-                    Result result = await sender.Send(query, cancellationToken);
+                    Result<VerifyRegisterOtpCodeResponse> result = await sender.Send(
+                        query,
+                        cancellationToken
+                    );
 
-                    return result.Match(Results.NoContent, CustomResults.Problem);
+                    return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
             .WithTags(Tags.Auth)

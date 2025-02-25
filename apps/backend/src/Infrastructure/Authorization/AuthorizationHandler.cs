@@ -1,7 +1,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Authorization;
 using Domain.Authorization;
-using Domain.Users;
+using Domain.Entities.Auth.Users;
 using SharedKernel.Results;
 
 namespace Infrastructure.Authorization;

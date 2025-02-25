@@ -1,4 +1,4 @@
-using Domain.Users;
+using Domain.Entities.Auth.Users;
 
 namespace Application.Abstractions.Authentication;
 

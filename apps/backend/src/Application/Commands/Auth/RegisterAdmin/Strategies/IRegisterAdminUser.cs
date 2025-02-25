@@ -1,4 +1,4 @@
-using Domain.Roles;
+using Domain.Entities.Auth.Roles;
 
 namespace Application.Commands.Auth.RegisterAdmin.Strategies;
 

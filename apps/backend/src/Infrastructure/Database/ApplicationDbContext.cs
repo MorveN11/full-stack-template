@@ -1,11 +1,11 @@
 using Application.Abstractions.Data;
+using Domain.Entities.Auth.OtpCodes;
+using Domain.Entities.Auth.Permissions;
+using Domain.Entities.Auth.RefreshTokens;
+using Domain.Entities.Auth.Roles;
+using Domain.Entities.Auth.UserProfiles;
+using Domain.Entities.Auth.Users;
 using Domain.Joins;
-using Domain.OtpCodes;
-using Domain.Permissions;
-using Domain.RefreshTokens;
-using Domain.Roles;
-using Domain.UserProfiles;
-using Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Domain;

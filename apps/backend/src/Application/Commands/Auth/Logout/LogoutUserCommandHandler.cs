@@ -2,10 +2,10 @@ using Application.Abstractions.Authentication;
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Services;
 using Domain.Authorization;
-using Domain.RefreshTokens;
-using Domain.Users;
+using Domain.Entities.Auth.RefreshTokens;
+using Domain.Identifiers;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -38,7 +38,7 @@ internal sealed class LogoutUserCommandHandler(
 
         if (refreshToken is null)
         {
-            return Result.Failure(UserErrors.SessionNotFound);
+            return Result.Failure(RefreshTokenErrors.SessionNotFound);
         }
 
         context.RefreshTokens.Remove(refreshToken);
@@ -48,6 +48,8 @@ internal sealed class LogoutUserCommandHandler(
         string jwt = userContext.Jwt;
 
         await cacheService.BlacklistTokenAsync(jwt, cancellationToken);
+
+        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
 
         return Result.Success();
     }

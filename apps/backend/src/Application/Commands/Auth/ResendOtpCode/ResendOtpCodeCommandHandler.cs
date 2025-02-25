@@ -1,9 +1,9 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Services;
+using Domain.Entities.Auth.OtpCodes;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
-using Domain.OtpCodes;
-using Domain.Users;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;
@@ -28,11 +28,6 @@ internal sealed class ResendOtpCodeCommandHandler(
         if (user is null)
         {
             return Result.Failure(UserErrors.NotFound(command.Email));
-        }
-
-        if (user.Status != UserStatus.Pending)
-        {
-            return Result.Failure(UserErrors.EmailAlreadyVerified);
         }
 
         OtpCodeType otpCodeType = Enum.Parse<OtpCodeType>(command.CodeType);
@@ -61,9 +56,7 @@ internal sealed class ResendOtpCodeCommandHandler(
         }
 
         await context
-            .OtpCodes.Where(o =>
-                o.UserId == user.Id && !o.Used && !o.Verified && o.Type == otpCodeType
-            )
+            .OtpCodes.Where(o => o.UserId == user.Id && !o.Used && o.Type == otpCodeType)
             .ExecuteUpdateAsync(o => o.SetProperty(p => p.Used, true), cancellationToken);
 
         string otpCode = OtpCode.GenerateCode();
@@ -81,19 +74,7 @@ internal sealed class ResendOtpCodeCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        string emailTemplate = await File.ReadAllTextAsync(
-            "../Domain/EmailTemplates/OtpCodeEmail.html",
-            cancellationToken
-        );
-
-        emailTemplate = emailTemplate.Replace("{{otpCode}}", otpCode);
-
-        await emailService.SendEmailAsync(
-            command.Email,
-            $"{otpCode} is your Verification Code",
-            emailTemplate,
-            isHtml: true
-        );
+        await User.SendOtpCodeAsync(emailService, command.Email, otpCode, cancellationToken);
 
         return Result.Success();
     }

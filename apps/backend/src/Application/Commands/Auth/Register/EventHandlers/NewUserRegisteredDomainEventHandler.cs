@@ -1,8 +1,9 @@
 using Application.Abstractions.Data;
-using Application.Abstractions.Services;
+using Domain.Entities.Auth.OtpCodes;
+using Domain.Entities.Auth.Users;
+using Domain.Entities.Auth.Users.DomainEvents;
 using Domain.Enums;
-using Domain.OtpCodes;
-using Domain.Users.DomainEvents;
+using Domain.Services;
 using MediatR;
 using SharedKernel.Time;
 
@@ -34,18 +35,11 @@ internal sealed class NewUserRegisteredDomainEventHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        string emailTemplate = await File.ReadAllTextAsync(
-            "../Domain/EmailTemplates/OtpCodeEmail.html",
-            cancellationToken
-        );
-
-        emailTemplate = emailTemplate.Replace("{{otpCode}}", otpCode);
-
-        await emailService.SendEmailAsync(
+        await User.SendOtpCodeAsync(
+            emailService,
             notification.UserEmail,
-            $"{otpCode} is your Verification Code",
-            emailTemplate,
-            isHtml: true
+            otpCode,
+            cancellationToken
         );
     }
 }

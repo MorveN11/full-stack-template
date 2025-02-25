@@ -3,7 +3,7 @@ using System.Text;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
-using Application.Abstractions.Services;
+using Domain.Services;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Database;

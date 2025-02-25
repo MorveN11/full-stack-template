@@ -1,9 +1,9 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
+using Domain.Entities.Auth.Roles;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
 using Domain.Joins;
-using Domain.Roles;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Time;
 

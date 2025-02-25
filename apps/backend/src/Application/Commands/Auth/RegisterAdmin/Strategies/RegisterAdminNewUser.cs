@@ -1,10 +1,10 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
+using Domain.Entities.Auth.Roles;
+using Domain.Entities.Auth.UserProfiles;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
 using Domain.Joins;
-using Domain.Roles;
-using Domain.UserProfiles;
-using Domain.Users;
 using SharedKernel.Time;
 
 namespace Application.Commands.Auth.RegisterAdmin.Strategies;

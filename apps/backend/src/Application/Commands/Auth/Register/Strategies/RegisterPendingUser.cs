@@ -1,7 +1,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
-using Domain.Users;
-using Domain.Users.DomainEvents;
+using Domain.Entities.Auth.Users;
+using Domain.Entities.Auth.Users.DomainEvents;
 using SharedKernel.Time;
 
 namespace Application.Commands.Auth.Register.Strategies;

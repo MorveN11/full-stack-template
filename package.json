@@ -5,6 +5,7 @@
   "description": "A Fullstack Template for .NET 9 and Next.js",
   "scripts": {
     "dev": "pnpm --parallel dev",
+    "compose": "docker compose -f 'compose.yaml' up --build -d",
     "stage": "docker compose -f 'compose-stage.yaml' up --build -d",
     "restore": "pnpm -F=backend restore",
     "build": "pnpm --parallel build",

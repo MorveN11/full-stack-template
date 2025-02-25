@@ -1,12 +1,12 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Services;
+using Domain.Entities.Auth.OtpCodes;
+using Domain.Entities.Auth.RefreshTokens;
+using Domain.Entities.Auth.Users;
 using Domain.Enums;
 using Domain.Identifiers;
-using Domain.OtpCodes;
-using Domain.RefreshTokens;
-using Domain.Users;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 using SharedKernel.Time;

@@ -13,7 +13,7 @@ internal sealed class FinishSessions : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        _ = app.MapPost(
+        app.MapPost(
                 "auth/finish-sessions",
                 async (Request request, ISender sender, CancellationToken cancellationToken) =>
                 {

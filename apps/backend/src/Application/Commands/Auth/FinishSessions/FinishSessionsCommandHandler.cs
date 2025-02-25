@@ -2,8 +2,9 @@ using Application.Abstractions.Authentication;
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Services;
 using Domain.Authorization;
+using Domain.Identifiers;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -39,6 +40,8 @@ internal sealed class FinishSessionsCommandHandler(
         string jwt = userContext.Jwt;
 
         await cacheService.BlacklistTokenAsync(jwt, cancellationToken);
+
+        await cacheService.EvictByTagAsync(Tags.Users, cancellationToken);
 
         return Result.Success();
     }

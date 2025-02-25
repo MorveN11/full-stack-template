@@ -1,10 +1,10 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Enums;
-using Domain.RefreshTokens;
-using Domain.Users;
+using Domain.Entities.Auth.RefreshTokens;
+using Domain.Entities.Auth.Users;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Errors;
 using SharedKernel.Results;
 using SharedKernel.Time;
 
@@ -29,26 +29,16 @@ internal sealed class LoginCommandHandler(
             .Include(u => u.Profile)
             .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
-        if (user is null)
+        if (!User.IsValidUser(user, command.Email, out Error? error))
         {
-            return Result.Failure<LoginResponse>(UserErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(error!);
         }
 
-        bool verified = passwordHasher.Verify(command.Password, user.PasswordHash);
+        bool verified = passwordHasher.Verify(command.Password, user!.PasswordHash);
 
         if (!verified)
         {
             return Result.Failure<LoginResponse>(UserErrors.InvalidCredentials);
-        }
-
-        if (!user.EmailVerified || user.Status == UserStatus.Pending)
-        {
-            return Result.Failure<LoginResponse>(UserErrors.EmailNotVerified);
-        }
-
-        if (user.Status == UserStatus.Blocked)
-        {
-            return Result.Failure<LoginResponse>(UserErrors.Forbidden);
         }
 
         string accessToken = tokenProvider.Create(user);

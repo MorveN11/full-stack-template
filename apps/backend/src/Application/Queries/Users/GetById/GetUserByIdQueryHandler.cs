@@ -1,10 +1,11 @@
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Services;
 using Domain.Authorization;
+using Domain.Entities.Auth.Users;
+using Domain.Enums;
 using Domain.Identifiers;
-using Domain.Users;
+using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -24,7 +25,7 @@ internal sealed class GetUserByIdQueryHandler(
         User? user = await context
             .Users.AsNoTracking()
             .AsSplitQuery()
-            .Where(u => u.Id == query.UserId)
+            .Where(u => u.Id == query.UserId && u.EmailVerified && u.Status == UserStatus.Active)
             .Include(u => u.Roles)
             .ThenInclude(r => r.Permissions)
             .SingleOrDefaultAsync(cancellationToken);

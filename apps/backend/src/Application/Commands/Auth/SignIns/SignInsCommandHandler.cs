@@ -1,6 +1,7 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Users;
+using Domain.Entities.Auth.Users;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Results;
 
@@ -13,13 +14,11 @@ internal sealed class SignInsCommandHandler(IApplicationDbContext context)
     {
         User? user = await context
             .Users.AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+            .SingleOrDefaultAsync(
+                x => x.Email == request.Email && x.EmailVerified && x.Status == UserStatus.Active,
+                cancellationToken
+            );
 
-        if (user is null)
-        {
-            return Result.Failure(UserErrors.NotFound(request.Email));
-        }
-
-        return Result.Success();
+        return user is null ? Result.Failure(UserErrors.NotFound(request.Email)) : Result.Success();
     }
 }

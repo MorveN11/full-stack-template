@@ -1,4 +1,4 @@
-using Application.Abstractions.Services;
+using Domain.Services;
 using FluentEmail.Core;
 
 namespace Infrastructure.Services;
