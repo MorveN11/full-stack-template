@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.5.0](https://github.com/MorveN11/full-stack-template/compare/v1.4.1...v1.5.0) (2025-02-25)
+
+
+### Features
+
+* add OTP code and user status enums, enhance user context and command structures ([a697133](https://github.com/MorveN11/full-stack-template/commit/a69713371b5e5ad59939462ed6f86621b44c6913))
+
 ## [1.4.1](https://github.com/MorveN11/full-stack-template/compare/v1.4.0...v1.4.1) (2025-02-07)
 
 
