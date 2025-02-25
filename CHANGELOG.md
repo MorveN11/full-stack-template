@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.5.1](https://github.com/MorveN11/full-stack-template/compare/v1.5.0...v1.5.1) (2025-02-25)
+
 # [1.5.0](https://github.com/MorveN11/full-stack-template/compare/v1.4.1...v1.5.0) (2025-02-25)
 
 
