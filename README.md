@@ -18,6 +18,8 @@
   "description": "A Fullstack Template for .NET 9 and Next.js",
   "scripts": {
     "dev": "pnpm --parallel dev",
+    "compose": "docker compose up --build -d",
+    "stage": "docker compose -f 'compose-stage.yaml' up --build -d",
     "restore": "pnpm -F=backend restore",
     "build": "pnpm --parallel build",
     "publish": "pnpm run -F=backend publish",
@@ -86,6 +88,18 @@ migrations and set you DB_CONNECTION_STRING in your GitHub Secrets.
 
   ```sh
   pnpm dev
+  ```
+
+- **compose**: Starts only necessary containers for development like, papercut, redis, postgresql
+
+  ```sh
+  pnpm compose
+  ```
+
+- **stage**: Starts the backend and the frontend application with all the necessary containers to test the hole application like in production
+
+  ```sh
+  pnpm stage
   ```
 
 - **restore**: Restores the .NET project dependencies.
