@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0](https://github.com/MorveN11/full-stack-template/compare/v1.5.1...v1.6.0) (2025-02-25)
+
+
+### Features
+
+* enhance OTP email handling and error management, update Docker compose command ([b14b6e8](https://github.com/MorveN11/full-stack-template/commit/b14b6e8b2dac20dfc176392d805fbd5e4f2868cf))
+
 ## [1.5.1](https://github.com/MorveN11/full-stack-template/compare/v1.5.0...v1.5.1) (2025-02-25)
 
 # [1.5.0](https://github.com/MorveN11/full-stack-template/compare/v1.4.1...v1.5.0) (2025-02-25)
