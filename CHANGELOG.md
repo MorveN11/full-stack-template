@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.8.0](https://github.com/MorveN11/full-stack-template/compare/v1.7.2...v1.8.0) (2025-02-25)
+
+
+### Features
+
+* update API routes and add HTML template for verification code email ([45da85b](https://github.com/MorveN11/full-stack-template/commit/45da85b9529845e92fb3bf3db1f46357308d3aab))
+
 ## [1.7.2](https://github.com/MorveN11/full-stack-template/compare/v1.7.1...v1.7.2) (2025-02-25)
 
 ## [1.7.1](https://github.com/MorveN11/full-stack-template/compare/v1.7.0...v1.7.1) (2025-02-25)

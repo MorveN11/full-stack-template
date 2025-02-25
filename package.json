@@ -1,6 +1,6 @@
 {
   "name": "template",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "private": false,
   "description": "A Fullstack Template for .NET 9 and Next.js",
   "scripts": {
